@@ -61,7 +61,7 @@ const EmployeeAttendance: FC = () => {
             <TableBody>
               {employeeList.map((emp: any) => (
                 <TableRow key={emp.id}>
-                  <TableCell align="center">{emp.name}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }} align="center">{emp.name}</TableCell>
                   <TableCell align="center">{emp.email}</TableCell>
                   <TableCell align="center">{emp.jobRole}</TableCell>
                   {allDates.map((date) => {

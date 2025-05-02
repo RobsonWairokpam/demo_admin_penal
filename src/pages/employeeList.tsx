@@ -13,9 +13,11 @@ import {
 } from "@mui/material";
 import Navbar from "../components/appBar";
 import { employeeList } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 
 const EmployeeList: FC = () => {
+  const navigate=useNavigate()
   return (
     <Box sx={{ display: "flex",backgroundColor:"primary.main" ,height:"100vh"}}>
       <Navbar />
@@ -73,6 +75,7 @@ const EmployeeList: FC = () => {
                       <Button
                         variant="contained"
                         size="small"
+                        onClick={() => {navigate(`/employeeDetails/${task.id}`)}}
                       >
                         View
                       </Button>     
