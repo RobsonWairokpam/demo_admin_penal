@@ -47,23 +47,39 @@ const LoginPage: FC = () => {
   };
   return (
     <Box
-      component="div"
+    component="div"
+    sx={{
+      display: "flex",
+      width: "100%",
+      height: "100vh",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#f5f5f5", // light background
+    }}
+  >
+    <Box
       sx={{
-        display: "flex",
         width: "100%",
-        height: "100vh",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
+        maxWidth: 400,
+        bgcolor: "white",
+        boxShadow: 3,
+        borderRadius: 3,
+        p: 4,
       }}
     >
-      <Typography variant="h4">Login</Typography>
-      <Box
-        component="form"
-        onSubmit={() => handleSubmit()}
-        p={5}
-        sx={{ width: "50%" }}
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ color: "#244D59", fontWeight: 600 }}
       >
+        Login
+      </Typography>
+  
+      <Box component="form" onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}>
         <Stack spacing={3}>
           <TextField
             label="Username"
@@ -75,15 +91,23 @@ const LoginPage: FC = () => {
           <TextField
             label="Password"
             variant="outlined"
+            type="password"
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
           <Button
             type="submit"
             variant="contained"
-            sx={{ backgroundColor: "#244D59",color:"white" }}
+            sx={{
+              backgroundColor: "#244D59",
+              color: "white",
+              fontWeight: "bold",
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#1c3b45",
+              },
+            }}
             fullWidth
           >
             Login
@@ -91,6 +115,8 @@ const LoginPage: FC = () => {
         </Stack>
       </Box>
     </Box>
+  </Box>
+  
   );
 };
 
