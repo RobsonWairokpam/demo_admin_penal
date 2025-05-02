@@ -9,17 +9,23 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { employeeList } from "../utils";
 
-const AddEmployee: FC = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [jobRole, setJobRole] = useState("");
+const UpdateAccount: FC = () => {
+  const id = useParams();
+  const employee = employeeList.find((item) => item.id === Number(id.id));
+  const [accountHolderName, setAccountHolderName] = useState(
+    employee?.account.accountHolderName
+  );
+  const [branch, setBranch] = useState(employee?.account.branch);
+  const [bankName, setBackName] = useState(employee?.account.bankName);
+  const [ifsc, setIfsc] = useState(employee?.account.ifsc);
+  const [accountNo, setAccountNo] = useState(employee?.account.accountNo);
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    console.log("employeeList", name, email, role,jobRole);
+    // console.log("employeeList", name, email, role,jobRole);
 
     navigate("/adminDashboard");
   };
@@ -54,41 +60,45 @@ const AddEmployee: FC = () => {
             }}
           >
             <Typography padding={2} variant="h5">
-              New Employee
+              Update Employee Bank Account Details
             </Typography>
-            <Box
-              component="form"
-              onSubmit={() => handleSubmit()}
-              p={5}
-            >
+            <Box component="form" onSubmit={() => handleSubmit()} p={5}>
               <Stack spacing={3}>
                 <TextField
-                  label="Name"
+                  label="Account Number"
                   variant="outlined"
                   fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  type="number"
+                  value={accountNo}
+                  onChange={(e) => setAccountNo(e.target.value)}
                 />
                 <TextField
-                  label="Email"
+                  label="Account Holder Name"
                   variant="outlined"
                   fullWidth
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={accountHolderName}
+                  onChange={(e) => setAccountHolderName(e.target.value)}
                 />
                 <TextField
-                  label="Role"
+                  label="Back Name"
                   variant="outlined"
                   fullWidth
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
+                  value={bankName}
+                  onChange={(e) => setBackName(e.target.value)}
                 />
-                  <TextField
-                  label="Job Role"
+                <TextField
+                  label="IFSC"
                   variant="outlined"
                   fullWidth
-                  value={jobRole}
-                  onChange={(e) => setJobRole(e.target.value)}
+                  value={ifsc}
+                  onChange={(e) => setIfsc(e.target.value)}
+                />
+                <TextField
+                  label="Branch"
+                  variant="outlined"
+                  fullWidth
+                  value={branch}
+                  onChange={(e) => setBranch(e.target.value)}
                 />
 
                 <Button type="submit" variant="contained" fullWidth>
@@ -103,4 +113,4 @@ const AddEmployee: FC = () => {
   );
 };
 
-export default AddEmployee;
+export default UpdateAccount;

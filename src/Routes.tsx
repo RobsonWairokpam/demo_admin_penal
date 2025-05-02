@@ -10,6 +10,9 @@ import ApplyLeave from "./pages/applyLeave";
 import EmployeeList from "./pages/employeeList";
 import EmployeeAttendance from "./pages/employeeAttendence";
 import RequestedLeaveList from "./pages/requestedLeaveList";
+import Finance from "./pages/finance";
+import UpdateAccount from "./pages/updateAccount";
+import AddAccount from "./pages/addAccout";
 
 const Routes: FC = () => {
   const routes = useMemo(() => {
@@ -64,7 +67,19 @@ const ROUTES: IRoute = {
     {
       path: "/requestedLeaveList",
       component: <RequestedLeaveList />,
-    }
+    },
+    {
+      path: "/finance",
+      component: <Finance />,
+    },
+    {
+      path: "/updateAccount/:id",
+      component: <UpdateAccount />,
+    },
+    {
+      path: "/addAccount/:id",
+      component: <AddAccount />,
+    },
   ],
 };
 

@@ -16,13 +16,23 @@ import {
   Notifications,
   Settings,
 } from "@mui/icons-material";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 // const drawerWidth = 240;
 
 const AdminDashboard: FC = () => {
   return (
     <Box
-      sx={{ display: "flex", backgroundColor: "primary.main", height: "100vh" }}
+      sx={{ display: "flex", backgroundColor: "primary.main", height: "100%" }}
     >
       <Navbar />
       <Box
@@ -146,9 +156,9 @@ const AdminDashboard: FC = () => {
               }}
             >
               <Box>
-                <Typography variant="h6">Active Users</Typography>
+                <Typography variant="h6">Active Employees</Typography>
                 <Typography variant="body2" color="text.secondary">
-                  12 active users online.
+                  12 active employees online.
                 </Typography>
               </Box>
               <AccountCircle sx={{ fontSize: 40, color: "#4caf50" }} />
@@ -223,7 +233,7 @@ const AdminDashboard: FC = () => {
             justifyContent: "space-between",
             flexWrap: "wrap",
             // gap: 3,
-            mt:5
+            mt: 5,
           }}
         >
           <Card
@@ -349,6 +359,53 @@ const AdminDashboard: FC = () => {
               <Settings sx={{ fontSize: 40, color: "#00bcd4" }} />
             </CardContent>
           </Card>
+        </Box>
+        <Box
+          component="div"
+          padding={3}
+          bgcolor="#fff"
+          borderRadius={2}
+          boxShadow={2}
+          sx={{ mt: 5 }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Employee Activity Over Time for 2025
+          </Typography>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart
+              data={[
+                { month: "Jan", projects: 2 },
+                { month: "Feb", projects: 5 },
+                { month: "Mar", projects: 3 },
+                { month: "Apr", projects: 8 },
+                { month: "May", projects: 4 },
+                { month: "Jun", projects: 6 },
+              ]}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+              <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
+              <Tooltip
+                contentStyle={{ borderRadius: "8px", fontSize: "14px" }}
+                labelStyle={{ fontWeight: "bold" }}
+                formatter={(value: number) => [
+                  `${value} Projects`,
+                  "Completed",
+                ]}
+              />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="projects"
+                stroke="#1976d2"
+                strokeWidth={3}
+                dot={{ r: 5 }}
+                activeDot={{ r: 7 }}
+                animationDuration={700}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </Box>
       </Box>
     </Box>

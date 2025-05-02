@@ -26,7 +26,7 @@ const RequestedLeaveList: FC = () => {
 
   return (
     <Box
-      sx={{ display: "flex", backgroundColor: "primary.main", height: "100vh" }}
+      sx={{ display: "flex", backgroundColor: "primary.main", height: "100%" }}
     >
       <Navbar />
       <Box

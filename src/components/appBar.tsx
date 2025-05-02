@@ -39,6 +39,7 @@ const drawerDataAdmin: DrawerSection[] = [
         children: [
           { name: "Employee List", path: "/employeeList" },
           { name: "Employee Attendance", path: "/employeeAttendance" },
+          { name: "Finance", path: "/finance" },
         ],
       },
     ],
@@ -48,6 +49,20 @@ const drawerDataAdmin: DrawerSection[] = [
     items: [
       {
         name: "Leaves",
+      },
+      {
+        name: "Leave Requests",
+      },
+    ],
+  },
+  {
+    section: "Reports",
+    items: [
+      {
+        name: "Attendance Report",
+      },
+      {
+        name: "Leave Report",
       },
     ],
   },
@@ -97,7 +112,7 @@ const Navbar: FC = () => {
       navigate("/adminDashBoard");
     } else if (itemName === "Dashboard" && role === "employee") {
       navigate("/employeeDashBoard");
-    }else if (itemName === "Requested Leaves" ) {
+    } else if (itemName === "Requested Leaves") {
       navigate("/requestedLeaveList");
     }
   };
@@ -127,9 +142,7 @@ const Navbar: FC = () => {
             noWrap
             sx={{ cursor: "pointer" }}
             onClick={() => handleNavClick("Dashboard")}
-          >
-            Dashboard
-          </Typography>
+          ></Typography>
           <Typography
             variant="body2"
             sx={{ cursor: "pointer" }}
@@ -141,6 +154,7 @@ const Navbar: FC = () => {
       </AppBar>
 
       <Drawer
+        // open ={false}
         variant="permanent"
         sx={{
           width: drawerWidth,
@@ -154,8 +168,18 @@ const Navbar: FC = () => {
         }}
       >
         <Box sx={{ overflow: "auto" }}>
-          <Box padding={2} textAlign="center">
-            <img src="/sdc_logo.png" alt="logo" width={50} />
+          <Box
+            padding={2}
+            textAlign="center"
+            onClick={() => {
+              if (role === "admin") {
+                navigate("/adminDashBoard");
+              } else if (role === "employee") {
+                navigate("/employeeDashBoard");
+              }
+            }}
+          >
+            <img style={{ cursor: "pointer" }} src="/sdc_logo.png" alt="logo" width={50} />
           </Box>
           <List>
             {drawerSections.map((section) => (

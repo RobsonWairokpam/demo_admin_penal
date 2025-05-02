@@ -41,20 +41,44 @@ export let employeeList = [
     role: "employee",
     onLeave: false,
     jobRole: "developer",
+    dateOfJoining: "2025-01-28",
+    account: {
+      accountNo: "123456789",
+      ifsc: "123456789",
+      bankName: "ICICI",
+      branch: "mumbai",
+      accountHolderName: "employee1",
+    },salaryDetails: [
+      {
+        month: "Feb",
+        year: "2025",
+        salary: "30000",
+      },
+      {
+        month: "Mar",
+        year: "2025",
+        salary: "30000",
+      },
+      {
+        month: "Apr",
+        year: "2025",
+        salary: "30000",
+      },
+    ],
     requestLeave: [
       {
         date: "2025-05-05",
         reason: "Medical",
         duration: "2 days",
         status: "Pending",
-        description:"requested leave for medical check up",
+        description: "requested leave for medical check up",
       },
       {
         date: "2025-05-10",
         reason: "Vacation",
         duration: "2 days",
         status: "Approved",
-        description:"requested leave for winter vacation",
+        description: "requested leave for winter vacation",
       },
     ],
     attendance: [
@@ -87,13 +111,39 @@ export let employeeList = [
     role: "employee",
     onLeave: true,
     jobRole: "developer",
+    dateOfJoining: "2025-01-28",
+    account: {
+      accountNo: "123456789",
+      ifsc: "123456789",
+      bankName: "ICICI",
+      branch: "mumbai",
+      accountHolderName: "employee2",
+    },
+    salaryDetails: [
+      {
+        month: "Feb",
+        year: "2025",
+        salary: "30000",
+      },
+      {
+        month: "Mar",
+        year: "2025",
+        salary: "30000",
+      },
+      {
+        month: "Apr",
+        year: "2025",
+        salary: "30000",
+      },
+    ],
+
     requestLeave: [
       {
         date: "2025-05-06",
         reason: "Family Event",
         duration: "2 days",
         status: "Pending",
-        description:"requested leave for falmily event",
+        description: "requested leave for falmily event",
       },
     ],
     attendance: [
@@ -111,6 +161,9 @@ export let employeeList = [
     role: "employee",
     onLeave: false,
     jobRole: "developer",
+    dateOfJoining: "2025-04-28",
+    account: {},
+    salaryDetails: [],
     requestLeave: [],
     attendance: [
       {
@@ -152,6 +205,30 @@ export let employeeList = [
     role: "employee",
     onLeave: false,
     jobRole: "developer",
+    dateOfJoining: "2025-01-28",
+    account: {
+      accountNo: "123456789",
+      ifsc: "123456789",
+      bankName: "ICICI",
+      branch: "mumbai",
+      accountHolderName: "employee4",
+    },salaryDetails: [
+      {
+        month: "Feb",
+        year: "2025",
+        salary: "30000",
+      },
+      {
+        month: "Mar",
+        year: "2025",
+        salary: "30000",
+      },
+      {
+        month: "Apr",
+        year: "2025",
+        salary: "30000",
+      },
+    ],
     requestLeave: [
       {
         date: "2025-05-07",
@@ -159,7 +236,7 @@ export let employeeList = [
         duration: "2 days",
         status: "Rejected",
 
-        description:"requested leave for sick",
+        description: "requested leave for sick",
       },
     ],
     attendance: [
