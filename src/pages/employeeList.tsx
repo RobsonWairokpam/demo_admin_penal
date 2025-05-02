@@ -72,18 +72,10 @@ const EmployeeList: FC = () => {
                     >
                       <Button
                         variant="contained"
-                        color="error"
-                        size="small"
-                       
-                      >
-                        Delete
-                      </Button>
-                      <Button
-                        variant="contained"
                         size="small"
                       >
-                        Edit
-                      </Button>
+                        View
+                      </Button>     
                     </Box>
                   </TableCell>
                 </TableRow>

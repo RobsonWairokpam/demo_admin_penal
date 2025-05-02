@@ -41,31 +41,12 @@ export let employeeList = [
     role: "employee",
     onLeave: false,
     jobRole: "developer",
-    leaves: [
-      {
-        id: 1,
-        from: "2025-06-01",
-        to: "2025-06-02",
-        purpose: "vacation",
-        duration: "2 days",
-        isApproved: false,
-      },
-      {
-        id: 2,
-        from: "2024-04-01",
-        to: "2023-04-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: true,
-      },
-      {
-        id: 3,
-        from: "2023-03-01",
-        to: "2023-03-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: true,
-      },
+    attendance: [
+      { date: "2025-04-28", status: "Present", checkIn: "09:00", checkOut: "17:00" },
+      { date: "2025-04-29", status: "Present", checkIn: "09:05", checkOut: "17:10" },
+      { date: "2025-04-30", status: "On Leave", note: "Vacation" },
+      { date: "2025-05-01", status: "Absent" },
+      { date: "2025-05-02", status: "Present", checkIn: "09:10", checkOut: "16:50" },
     ],
   },
   {
@@ -75,31 +56,12 @@ export let employeeList = [
     role: "employee",
     onLeave: true,
     jobRole: "developer",
-    leaves: [
-      {
-        id: 1,
-        from: "2023-01-01",
-        to: "2023-01-02",
-        purpose: "vacation",
-        duration: "2 days",
-        isApproved: false,
-      },
-      {
-        id: 2,
-        from: "2023-04-01",
-        to: "2023-04-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: false,
-      },
-      {
-        id: 3,
-        from: "2023-03-01",
-        to: "2023-03-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: true,
-      },
+    attendance: [
+      { date: "2025-04-28", status: "On Leave", note: "Personal" },
+      { date: "2025-04-29", status: "On Leave", note: "Personal" },
+      { date: "2025-04-30", status: "Absent" },
+      { date: "2025-05-01", status: "On Leave", note: "Family" },
+      { date: "2025-05-02", status: "On Leave", note: "Family" },
     ],
   },
   {
@@ -109,31 +71,12 @@ export let employeeList = [
     role: "employee",
     onLeave: false,
     jobRole: "developer",
-    leaves: [
-      {
-        id: 1,
-        from: "2023-01-01",
-        to: "2023-01-02",
-        purpose: "vacation",
-        duration: "2 days",
-        isApproved: false,
-      },
-      {
-        id: 2,
-        from: "2023-04-01",
-        to: "2023-04-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: true,
-      },
-      {
-        id: 3,
-        from: "2023-03-01",
-        to: "2023-03-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: false,
-      },
+    attendance: [
+      { date: "2025-04-28", status: "Present", checkIn: "09:00", checkOut: "17:00" },
+      { date: "2025-04-29", status: "Present", checkIn: "09:10", checkOut: "17:05" },
+      { date: "2025-04-30", status: "Present", checkIn: "09:15", checkOut: "17:00" },
+      { date: "2025-05-01", status: "Present", checkIn: "09:00", checkOut: "16:45" },
+      { date: "2025-05-02", status: "Present", checkIn: "09:05", checkOut: "17:00" },
     ],
   },
   {
@@ -143,34 +86,13 @@ export let employeeList = [
     role: "employee",
     onLeave: false,
     jobRole: "developer",
-    leaves: [
-      {
-        id: 1,
-
-        from: "2023-01-01",
-        to: "2023-01-02",
-        purpose: "vacation",
-        duration: "2 days",
-        isApproved: false,
-      },
-      {
-        id: 1,
-
-        from: "2023-04-01",
-        to: "2023-04-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: false,
-      },
-      {
-        id: 1,
-
-        from: "2023-03-01",
-        to: "2023-03-02",
-        purpose: "Sick",
-        duration: "2 days",
-        isApproved: true,
-      },
+    attendance: [
+      { date: "2025-04-28", status: "Absent" },
+      { date: "2025-04-29", status: "Present", checkIn: "09:10", checkOut: "17:00" },
+      { date: "2025-04-30", status: "On Leave", note: "Sick" },
+      { date: "2025-05-01", status: "Present", checkIn: "09:00", checkOut: "17:10" },
+      { date: "2025-05-02", status: "Present", checkIn: "09:00", checkOut: "16:55" },
     ],
   },
 ];
+

@@ -8,6 +8,7 @@ import EmployeeDetails from "./pages/employeeDetails";
 import AddEmployee from "./pages/addEmployee";
 import ApplyLeave from "./pages/applyLeave";
 import EmployeeList from "./pages/employeeList";
+import EmployeeAttendance from "./pages/employeeAttendence";
 
 const Routes: FC = () => {
   const routes = useMemo(() => {
@@ -55,6 +56,10 @@ const ROUTES: IRoute = {
       path: "/employeeList",
       component: <EmployeeList />,
     },
+    {
+      path: "/employeeAttendance",
+      component: <EmployeeAttendance />,
+    }
   ],
 };
 

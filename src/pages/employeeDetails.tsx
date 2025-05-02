@@ -11,12 +11,12 @@ const EmployeeDetails: FC = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const employee = employeeList.find((item) => item.id === Number(id.id));
-  const leaves = employee?.leaves.filter((item) => item.isApproved === true);
-  const pendingLeaves = employee?.leaves.filter(
-    (item) =>
-      item.isApproved === false &&
-      item.from >= new Date().toISOString().split("T")[0]
-  );
+  // const leaves = employee?.leaves.filter((item) => item.isApproved === true);
+  // const pendingLeaves = employee?.leaves.filter(
+  //   (item) =>
+  //     item.isApproved === false &&
+  //     item.from >= new Date().toISOString().split("T")[0]
+  // );
   const style = {
     position: "absolute",
     top: "50%",
@@ -32,8 +32,8 @@ const EmployeeDetails: FC = () => {
   console.log({
     employeess: employee,
     iddd: id,
-    leaves: leaves,
-    PendingLeave: pendingLeaves,
+    // leaves: leaves,
+    // PendingLeave: pendingLeaves,
   });
   return (
     <>
@@ -46,7 +46,7 @@ const EmployeeDetails: FC = () => {
           <Typography padding={3} variant="h3">
             {employee?.name}&nbsp; Details
           </Typography>
-          <Box>
+          {/* <Box>
             {pendingLeaves?.length !== 0 && (
               <Button
                 onClick={handleOpen}
@@ -65,7 +65,7 @@ const EmployeeDetails: FC = () => {
                 </Typography>
               </Button>
             )}
-          </Box>
+          </Box> */}
         </Box>
 
         <Card sx={{ padding: 5 }}>
@@ -102,7 +102,7 @@ const EmployeeDetails: FC = () => {
           <Typography variant="h6">
             Leave Taken: &nbsp;
             <Typography component="span" sx={{ fontWeight: "bold" }}>
-              {leaves?.length}
+              {/* {leaves?.length} */}
             </Typography>
           </Typography>
         </Card>
@@ -114,7 +114,7 @@ const EmployeeDetails: FC = () => {
         >
           <Box component={"div"} sx={style}>
             <Typography variant="h4">Pending Leaves</Typography>
-            {pendingLeaves?.map((item) => {
+            {/* {pendingLeaves?.map((item) => {
               return (
                 <Box component={"div"} sx={{ scroll: "auto" }}>
                   <Card sx={{ padding: 5, margin: 2 }}>
@@ -151,7 +151,7 @@ const EmployeeDetails: FC = () => {
                   )}
                 </Box>
               );
-            })}
+            })} */}
           </Box>
         </Modal>
       </Box>
