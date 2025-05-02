@@ -56,7 +56,12 @@ const drawerDataAdmin: DrawerSection[] = [
 const drawerDataEmployee: DrawerSection[] = [
   {
     section: "Self Service",
-    items: [{ name: "Profile" }],
+    items: [
+      { name: "Profile" },
+      {
+        name: "Requested Leaves",
+      },
+    ],
   },
 ];
 
@@ -69,9 +74,10 @@ const Navbar: FC = () => {
 
   useEffect(() => {
     const employeesMenu = drawerDataAdmin.find((section) =>
-      section.items.some((item) =>
-        item.name === "Employees" &&
-        item.children?.some((c) => c.path === location.pathname)
+      section.items.some(
+        (item) =>
+          item.name === "Employees" &&
+          item.children?.some((c) => c.path === location.pathname)
       )
     );
     if (employeesMenu) setEmployeesOpen(true);
@@ -89,6 +95,10 @@ const Navbar: FC = () => {
       setEmployeesOpen((prev) => !prev);
     } else if (itemName === "Dashboard" && role === "admin") {
       navigate("/adminDashBoard");
+    } else if (itemName === "Dashboard" && role === "employee") {
+      navigate("/employeeDashBoard");
+    }else if (itemName === "Requested Leaves" ) {
+      navigate("/requestedLeaveList");
     }
   };
 
@@ -96,7 +106,8 @@ const Navbar: FC = () => {
     navigate(path);
   };
 
-  const drawerSections = role === "admin" ? drawerDataAdmin : drawerDataEmployee;
+  const drawerSections =
+    role === "admin" ? drawerDataAdmin : drawerDataEmployee;
 
   return (
     <>
@@ -160,15 +171,17 @@ const Navbar: FC = () => {
                         onClick={() => handleNavClick(item.name)}
                         selected={
                           item.name === "Employees" &&
-                          item.children?.some((c) => c.path === location.pathname)
+                          item.children?.some(
+                            (c) => c.path === location.pathname
+                          )
                         }
                         sx={{
-                          '&.Mui-selected': {
-                            backgroundColor: '#e0e0e0',
-                            color: 'black',
+                          "&.Mui-selected": {
+                            backgroundColor: "#e0e0e0",
+                            color: "black",
                           },
-                          '&.Mui-selected:hover': {
-                            backgroundColor: '#d5d5d5',
+                          "&.Mui-selected:hover": {
+                            backgroundColor: "#d5d5d5",
                           },
                         }}
                       >
@@ -185,16 +198,18 @@ const Navbar: FC = () => {
                           {item.children.map((childItem) => (
                             <ListItemButton
                               key={childItem.name}
-                              onClick={() => handleEmployeeSubItemClick(childItem.path)}
+                              onClick={() =>
+                                handleEmployeeSubItemClick(childItem.path)
+                              }
                               selected={location.pathname === childItem.path}
                               sx={{
                                 pl: 4,
-                                '&.Mui-selected': {
-                                  backgroundColor: '#e0e0e0',
-                                  color: 'black',
+                                "&.Mui-selected": {
+                                  backgroundColor: "#e0e0e0",
+                                  color: "black",
                                 },
-                                '&.Mui-selected:hover': {
-                                  backgroundColor: '#d5d5d5',
+                                "&.Mui-selected:hover": {
+                                  backgroundColor: "#d5d5d5",
                                 },
                               }}
                             >
