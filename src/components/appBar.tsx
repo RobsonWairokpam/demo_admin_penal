@@ -84,7 +84,7 @@ const Navbar: FC = () => {
     } else if (itemName === "Profile") {
       navigate(`/employeeDetails/${Number(employeeId)}`);
     } else if (itemName === "Leaves") {
-      navigate("/leaves");
+      // navigate("/leaves");
     } else if (itemName === "Employees") {
       setEmployeesOpen((prev) => !prev);
     } else if (itemName === "Dashboard" && role === "admin") {

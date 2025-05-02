@@ -10,16 +10,18 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Typography,
 } from "@mui/material";
 import Navbar from "../components/appBar";
 import { employeeList } from "../utils";
 import { useNavigate } from "react-router-dom";
 
-
 const EmployeeList: FC = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
-    <Box sx={{ display: "flex",backgroundColor:"primary.main" ,height:"100vh"}}>
+    <Box
+      sx={{ display: "flex", backgroundColor: "primary.main", height: "100vh" }}
+    >
       <Navbar />
       <Box
         component="main"
@@ -30,33 +32,53 @@ const EmployeeList: FC = () => {
         }}
       >
         <Toolbar />
+        <Box
+          component={"div"}
+          padding={2}
+          color={"white"}
+          sx={{ display: "flex", justifyContent: "space-between" }}
+        >
+          <Typography variant="h5"> Employee List</Typography>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/addEmployee")}
+            sx={{
+              // backgroundColor: "secondary.main",
+              "&:hover": {
+                backgroundColor: "primary.light",
+              },
+            }}
+          >
+            Add Employee
+          </Button>
+        </Box>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: "bold" }} align="center">Employee Name</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="center">Email</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="center">Job Role</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="center">On Leave</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }} align="center">Action</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Employee Name
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Email
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Job Role
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  On Leave
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="center">
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {employeeList.map((task: any, index: number) => (
-                <TableRow
-                  key={task.id}
-                  draggable
-                 
-                  
-                >
+                <TableRow key={task.id} draggable>
                   <TableCell align="center">{task.name}</TableCell>
                   <TableCell align="center">{task.email}</TableCell>
-                  <TableCell
-                    align="center"
-                    
-                  >
-                    {task.jobRole}
-                  </TableCell>
+                  <TableCell align="center">{task.jobRole}</TableCell>
                   <TableCell
                     align="center"
                     sx={{ color: task.onLeave ? "red" : "greed" }}
@@ -75,10 +97,12 @@ const EmployeeList: FC = () => {
                       <Button
                         variant="contained"
                         size="small"
-                        onClick={() => {navigate(`/employeeDetails/${task.id}`)}}
+                        onClick={() => {
+                          navigate(`/employeeDetails/${task.id}`);
+                        }}
                       >
                         View
-                      </Button>     
+                      </Button>
                     </Box>
                   </TableCell>
                 </TableRow>
