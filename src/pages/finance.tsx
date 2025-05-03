@@ -7,11 +7,12 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/appBar";
 import { employeeList } from "../utils";
@@ -23,8 +24,31 @@ const Finance: FC = () => {
   const location = useLocation();
   const path = location.pathname.replace("/", "");
   const navigate = useNavigate();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const paginatedEmployees = employeeList.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box
+      sx={{
+        display: "flex",
+        // backgroundColor: "#f5f5f5",
+        minHeight: "100vh",
+        // width: "100%",
+      }}
+    >
       <Navbar />
       <Box
         component="main"
@@ -47,7 +71,10 @@ const Finance: FC = () => {
             sx={{ cursor: "pointer" }}
             onClick={() => navigate(-1)}
           />
-          <HomeIcon sx={{ cursor: "pointer" }} onClick={() => navigate("/")} />
+          <HomeIcon
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("/adminDashboard")}
+          />
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             /&nbsp;{path}
           </Typography>
@@ -61,9 +88,21 @@ const Finance: FC = () => {
 
         <TableContainer
           component={Paper}
-          sx={{ borderRadius: 3, boxShadow: 3 }}
+          sx={{
+            borderRadius: 3,
+            boxShadow: 3,
+            scrollX: "auto",
+            // overflowX: "auto",
+            // minWidth: 700,
+            width:{
+              xs: "40vh",
+              sm: "40vh",
+              md:"100%",
+              lg:"100%"
+            },
+          }}
         >
-          <Table size="small">
+          <Table size="small" >
             <TableHead sx={{ backgroundColor: "#e3f2fd" }}>
               <TableRow>
                 <TableCell
@@ -106,7 +145,7 @@ const Finance: FC = () => {
             </TableHead>
 
             <TableBody>
-              {employeeList.map((task: any) => {
+              {paginatedEmployees.map((task: any) => {
                 const totalSalary =
                   task.salaryDetails?.reduce(
                     (total: number, entry: any) => total + Number(entry.salary),
@@ -163,6 +202,16 @@ const Finance: FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          component="div"
+          count={employeeList.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 15]}
+          sx={{ mt: 2 }}
+        />
       </Box>
     </Box>
   );

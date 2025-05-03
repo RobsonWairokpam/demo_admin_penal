@@ -59,12 +59,15 @@ const EmployeeList: FC = () => {
         }}
       >
         <Toolbar />
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1,my:4 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, my: 4 }}>
           <ArrowBackIcon
             sx={{ cursor: "pointer" }}
             onClick={() => navigate(-1)}
           />
-          <HomeIcon sx={{ cursor: "pointer" }} onClick={() => navigate("/")} />
+          <HomeIcon
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("/adminDashboard")}
+          />
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             /&nbsp;{path}
           </Typography>
@@ -74,12 +77,20 @@ const EmployeeList: FC = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: { xs: 2, sm: 0 },
             mb: 3,
           }}
         >
-          <Typography variant="h4" fontWeight={600}>
+          <Typography
+            variant="h4"
+            fontWeight={600}
+            textAlign={{ xs: "center", sm: "left" }}
+            sx={{ hidden: { xs: "none", sm: "block" } }}
+          >
             Employee List
           </Typography>
+
           <Button
             variant="contained"
             onClick={() => navigate("/addEmployee")}
@@ -92,6 +103,7 @@ const EmployeeList: FC = () => {
               py: 1,
               borderRadius: "8px",
               boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+              width: { xs: "100%", sm: "auto" },
               "&:hover": {
                 backgroundColor: "#287177",
               },
@@ -106,6 +118,15 @@ const EmployeeList: FC = () => {
           sx={{
             borderRadius: "12px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+            scrollX: "auto",
+            // overflowX: "auto",
+            // minWidth: 700,
+            width: {
+              xs: "40vh",
+              sm: "40vh",
+              md: "100%",
+              lg: "100%",
+            },
           }}
         >
           <Table

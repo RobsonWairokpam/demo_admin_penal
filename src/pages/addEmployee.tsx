@@ -4,7 +4,11 @@ import {
   Box,
   Button,
   Card,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Toolbar,
   Typography,
@@ -48,12 +52,15 @@ const AddEmployee: FC = () => {
       >
         <Toolbar />
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1,mt:4 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 4 }}>
           <ArrowBackIcon
             sx={{ cursor: "pointer" }}
             onClick={() => navigate(-1)}
           />
-          <HomeIcon sx={{ cursor: "pointer" }} onClick={() => navigate("/")} />
+          <HomeIcon
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("/adminDashboard")}
+          />
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             /&nbsp;{path}
           </Typography>
@@ -81,7 +88,7 @@ const AddEmployee: FC = () => {
               variant="h5"
               sx={{ mb: 3, fontWeight: 600, color: "#0d47a1" }}
             >
-              Add Employee Bank Account Details
+              Add New Employee
             </Typography>
 
             <Box component="form" onSubmit={handleSubmit}>
@@ -105,13 +112,27 @@ const AddEmployee: FC = () => {
                   />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
+                  {/* <TextField
                     label="Role"
+                    type="select"
                     variant="outlined"
                     fullWidth
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
-                  />
+                  /> */}
+                  <FormControl fullWidth variant="outlined">
+                    <InputLabel id="role-label">Role</InputLabel>
+                    <Select
+                      labelId="role-label"
+                      id="role"
+                      value={role}
+                      label="Role"
+                      onChange={(e) => setRole(e.target.value)}
+                    >
+                      <MenuItem value={"hr"}>HR</MenuItem>
+                      <MenuItem value={20}>Employee</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
@@ -135,7 +156,7 @@ const AddEmployee: FC = () => {
                     onChange={(e) => setDateOfJoining(e.target.value)}
                   />
                 </Grid>
-                <Grid size={{ xs: 12 }}>
+                <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
                   <Button
                     type="submit"
                     variant="contained"

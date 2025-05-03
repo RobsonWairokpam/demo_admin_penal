@@ -73,7 +73,10 @@ const EmployeeAttendance: FC = () => {
             sx={{ cursor: "pointer" }}
             onClick={() => navigate(-1)}
           />
-          <HomeIcon sx={{ cursor: "pointer" }} onClick={() => navigate("/")} />
+          <HomeIcon
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate("/adminDashboard")}
+          />
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             /&nbsp;{path}
           </Typography>
@@ -87,10 +90,19 @@ const EmployeeAttendance: FC = () => {
         <TableContainer
           component={Paper}
           sx={{
-            maxWidth: "100%",
+            // maxWidth: "100%",
             overflowX: "auto",
             borderRadius: 2,
             boxShadow: 3,
+            scrollX: "auto",
+            // overflowX: "auto",
+            // minWidth: 700,
+            width: {
+              xs: "40vh",
+              sm: "40vh",
+              md: "100%",
+              lg: "100%",
+            },
           }}
         >
           <Table stickyHeader size="small">

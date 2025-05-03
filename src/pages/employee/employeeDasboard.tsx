@@ -7,14 +7,8 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
   IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -56,9 +50,15 @@ const EmployeeDasboard: FC = () => {
 
     return () => clearInterval(interval);
   }, [clockedOut, standardStartTime]);
+  const drawerWidth = 240;
   return (
     <Box
-      sx={{ display: "flex", backgroundColor: "primary.main", height: "100vh" }}
+      sx={{
+        display: "flex",
+        // backgroundColor: "#f5f5f5",
+        minHeight: "100vh",
+        // width: "100%",
+      }}
     >
       <Navbar />
       <Box
@@ -66,7 +66,14 @@ const EmployeeDasboard: FC = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          // marginLeft: `${drawerWidth}px`,
+          marginLeft: {
+            xs: 0,
+            sm: 0,
+            // [`@media (min-width:750px)`]: 0, // custom breakpoint applied here
+            // [`@media (min-width: 600px) and (max-width: 900px)`]: 0, // Range between 634px and 867px`, // Range between 634px and 867px
+            md: `${drawerWidth}px`,
+            lg: `${drawerWidth}px`,
+          },
         }}
       >
         <Toolbar />
@@ -193,12 +200,11 @@ const EmployeeDasboard: FC = () => {
             </CardContent>
           </Card>
         </Box>
-
+        <Divider sx={{ my: 3  }} />
         <Box
           component={"div"}
           sx={{
             my: 3,
-            borderTop: "2px solid",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",

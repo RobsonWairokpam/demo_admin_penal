@@ -70,7 +70,7 @@ const UpdateAccount: FC = () => {
             sx={{ cursor: "pointer" }}
             onClick={() => navigate(-1)}
           />
-          <HomeIcon sx={{ cursor: "pointer" }} onClick={() => navigate("/")} />
+          <HomeIcon sx={{ cursor: "pointer" }} onClick={() => navigate("/adminDashboard")} />
           <Typography variant="body1" sx={{ fontWeight: 500 }}>
             /&nbsp;{path}
           </Typography>
