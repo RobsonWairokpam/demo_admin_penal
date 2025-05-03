@@ -1,8 +1,20 @@
 import { FC, useState } from "react";
 import Navbar from "../components/appBar";
-import { Box, Button, Card, Modal, Toolbar, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Grid,
+  Modal,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { employeeList } from "../utils";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import HomeIcon from "@mui/icons-material/Home";
+
+const drawerWidth = 240;
 
 const EmployeeDetails: FC = () => {
   const id: any = useParams();
@@ -10,6 +22,12 @@ const EmployeeDetails: FC = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const path = location.pathname.replace("/", "");
+
   const employee = employeeList.find((item) => item.id === Number(id.id));
   const leaves = employee?.requestLeave.filter(
     (item) => item.status === "Approved"
@@ -20,43 +38,48 @@ const EmployeeDetails: FC = () => {
       item.date >= new Date().toISOString().split("T")[0]
   );
 
-  console.log({
-    employeess: employee,
-    iddd: id,
-    // leaves: leaves,
-    // PendingLeave: pendingLeaves,
-  });
   return (
-    <Box
-      sx={{ display: "flex", backgroundColor: "primary.main", height: "100vh" }}
-    >
+    <Box sx={{ display: "flex" }}>
       <Navbar />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          // marginLeft: `${drawerWidth}px`,
+          marginLeft: {
+            xs: 0,
+            sm: 0,
+            md: `${drawerWidth}px`,
+            lg: `${drawerWidth}px`,
+          },
         }}
       >
         <Toolbar />
-        <Box
-          component={"div"}
-          sx={{ display: "flex", justifyContent: "flex-end", padding: 2 }}
-        >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, my: 4 }}>
+          <ArrowBackIcon
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate(-1)}
+          />
+          <HomeIcon sx={{ cursor: "pointer" }} onClick={() => navigate("/")} />
+          <Typography variant="body1" sx={{ fontWeight: 500 }}>
+            /&nbsp;{path}
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
           {pendingLeaves?.length !== 0 && (
             <Button
               onClick={handleOpen}
-              color="inherit"
+              variant="contained"
               sx={{
+                backgroundColor: "#0d47a1",
                 textTransform: "none",
-                backgroundColor: "primary.light",
+                fontWeight: 600,
                 "&:hover": {
-                  backgroundColor: "primary.main",
+                  backgroundColor: "#1565c0",
                 },
               }}
             >
-              Leave &nbsp;
+              Pending Leaves&nbsp;
               <Typography component="span">
                 ({pendingLeaves?.length})
               </Typography>
@@ -64,120 +87,126 @@ const EmployeeDetails: FC = () => {
           )}
         </Box>
 
-        <Card sx={{ padding: 5 }}>
-          <Box
-            component={"div"}
+        <Card
+          elevation={4}
+          sx={{
+            p: 4,
+            borderRadius: 3,
+            backgroundColor: "#ffffff",
+            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <Typography
+            variant="h5"
             sx={{
-              marginBottom: 2,
-              // textAlign: "center",
-              borderBottom: "2px solid",
-              borderColor: "primary.main", 
-              paddingBottom: 1,
+              mb: 3,
+              fontWeight: 600,
+              color: "#0d47a1",
+              borderBottom: 1,
+              pb: 1,
             }}
           >
-            <Typography variant="h4">{employee?.name}&nbsp; Details</Typography>
-          </Box>
-          <Typography variant="h6">
-            Name: &nbsp;
-            <Typography component="span" sx={{ fontWeight: "bold" }}>
-              {employee?.name}
-            </Typography>
+            {employee?.name} - Employee Details
           </Typography>
-          <Typography variant="h6">
-            Email: &nbsp;
-            <Typography component="span" sx={{ fontWeight: "bold" }}>
-              {employee?.email}
-            </Typography>
-          </Typography>
-          <Typography variant="h6">
-            Job Role: &nbsp;
-            <Typography component="span" sx={{ fontWeight: "bold" }}>
-              {employee?.jobRole}
-            </Typography>
-          </Typography>
-          <Typography variant="h6">
-            Role: &nbsp;
-            <Typography component="span" sx={{ fontWeight: "bold" }}>
-              {employee?.role}
-            </Typography>
-          </Typography>
-          <Typography variant="h6">
-            Onleave: &nbsp;
-            <Typography component="span" sx={{ fontWeight: "bold" }}>
-              {employee?.onLeave ? "Yes" : "No"}
-            </Typography>
-          </Typography>
-          <Typography variant="h6">
-            Leave Taken: &nbsp;
-            <Typography component="span" sx={{ fontWeight: "bold" }}>
-              {leaves?.length}
-            </Typography>
-          </Typography>
+
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="subtitle1">
+                <strong>Name:</strong> {employee?.name}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="subtitle1">
+                <strong>Email:</strong> {employee?.email}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="subtitle1">
+                <strong>Job Role:</strong> {employee?.jobRole}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="subtitle1">
+                <strong>Role:</strong> {employee?.role}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="subtitle1">
+                <strong>On Leave:</strong> {employee?.onLeave ? "Yes" : "No"}
+              </Typography>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <Typography variant="subtitle1">
+                <strong>Leaves Taken:</strong> {leaves?.length}
+              </Typography>
+            </Grid>
+          </Grid>
         </Card>
 
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          // sx={{ width: { md: "80%", lg: "60%" } }}
-        >
+        {/* Modal for Pending Leaves */}
+        <Modal open={open} onClose={handleClose}>
           <Box
-            component={"div"}
             sx={{
               position: "absolute",
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: { xs: "90%", md: "70%", lg: "60%" },
+              width: { xs: "90%", sm: "80%", md: "60%" },
               bgcolor: "background.paper",
+              borderRadius: 3,
               boxShadow: 24,
               p: 4,
               maxHeight: "90vh",
               overflowY: "auto",
-              borderRadius: 2,
             }}
           >
-            <Typography variant="h4">Leave Details</Typography>
-            {pendingLeaves?.map((item) => {
-              return (
-                <Box component={"div"} sx={{ scroll: "auto" }}>
-                  <Card sx={{ padding: 3, backgroundColor: "primary.light" }}>
-                    <Typography variant="h6">
-                      From: &nbsp;
-                      <Typography component="span" sx={{ fontWeight: "bold" }}>
-                        {item.date}
-                      </Typography>
-                    </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
+              Pending Leave Requests
+            </Typography>
 
-                    <Typography variant="h6">
-                      Purpose: &nbsp;
-                      <Typography component="span" sx={{ fontWeight: "bold" }}>
-                        {item.reason}
-                      </Typography>
-                    </Typography>
-                    <Typography variant="h6">
-                      Duration: &nbsp;
-                      <Typography component="span" sx={{ fontWeight: "bold" }}>
-                        {item.duration}
-                      </Typography>
-                    </Typography>
-                    <Typography variant="h6">
-                      Purpose: &nbsp;
-                      <Typography component="span" sx={{ fontWeight: "bold" }}>
-                        {item.description}
-                      </Typography>
-                    </Typography>
-                  </Card>
-                  {role === "admin" && (
-                    <Box component={"div"} sx={{ mt: 1 }}>
-                      <Button sx={{ fontWeight: "bold" }}>Approve</Button>{" "}
-                      <Button sx={{ fontWeight: "bold" }}>Reject</Button>
-                    </Box>
-                  )}
-                </Box>
-              );
-            })}
+            {pendingLeaves?.map((item, index) => (
+              <Card
+                key={index}
+                sx={{
+                  p: 3,
+                  mb: 2,
+                  backgroundColor: "#e3f2fd",
+                  borderRadius: 2,
+                }}
+              >
+                <Typography variant="subtitle1">
+                  <strong>Date:</strong> {item.date}
+                </Typography>
+                <Typography variant="subtitle1">
+                  <strong>Duration:</strong> {item.duration}
+                </Typography>
+                <Typography variant="subtitle1">
+                  <strong>Reason:</strong> {item.reason}
+                </Typography>
+                <Typography variant="subtitle1">
+                  <strong>Description:</strong> {item.description}
+                </Typography>
+
+                {role === "admin" && (
+                  <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Reject
+                    </Button>
+                  </Box>
+                )}
+              </Card>
+            ))}
           </Box>
         </Modal>
       </Box>

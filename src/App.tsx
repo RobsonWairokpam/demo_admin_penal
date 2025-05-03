@@ -22,6 +22,15 @@ const ProviderWrapper: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: {
     mode: "light",
     primary: {
@@ -41,6 +50,7 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
+          backgroundColor: "#fafafa",
           "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
             width: "6px",
             height: "6px",

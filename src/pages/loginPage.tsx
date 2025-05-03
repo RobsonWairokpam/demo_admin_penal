@@ -1,4 +1,12 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Link,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { adminDetail, employeeDetail } from "../utils";
 import { useNavigate } from "react-router-dom";
@@ -8,17 +16,12 @@ const LoginPage: FC = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
+
   useEffect(() => {
-    if (role === "admin") {
-      navigate("/adminDashboard");
-    }
-    if (role === "employee") {
-      navigate("/employeeDashboard");
-    }
-    // if (role === "hr") {
-    //   navigate("/hrDashboard");
-    // }
+    if (role === "admin") navigate("/adminDashboard");
+    if (role === "employee") navigate("/employeeDashboard");
   }, [navigate, role]);
+
   const handleSubmit = () => {
     if (
       adminDetail.username === username &&
@@ -33,63 +36,95 @@ const LoginPage: FC = () => {
     ) {
       localStorage.setItem("role", employeeDetail.role);
       localStorage.setItem("employeeId", employeeDetail.id.toString());
-
       navigate("/employeeDashboard");
     }
-    // if (
-    //     username === hRDetail.username &&
-    //     password === hRDetail.password
-    //   ) {
-    //     localStorage.setItem("role", hRDetail.role);
-    //     navigate("/hrDashboard");
-    //   }
-    console.log(username, password);
   };
+
   return (
     <Box
-      component="div"
       sx={{
-        display: "flex",
-        width: "100%",
         height: "100vh",
-        alignItems: "center",
+        width: "100%",
+        backgroundImage: `url('/your-image-path.jpg')`, // Replace with your image path
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
         justifyContent: "center",
-        flexDirection: "column",
+        alignItems: "center",
+        p: 2,
       }}
     >
-      <Typography variant="h4">Login</Typography>
-      <Box
-        component="form"
-        onSubmit={() => handleSubmit()}
-        p={5}
-        sx={{ width: "50%" }}
+      <Paper
+        elevation={6}
+        sx={{
+          width: "100%",
+          maxWidth: 420,
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "rgba(255, 255, 255, 0.9)", // semi-transparent white
+          backdropFilter: "blur(8px)",
+        }}
       >
-        <Stack spacing={3}>
-          <TextField
-            label="Username"
-            variant="outlined"
-            fullWidth
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ backgroundColor: "#244D59",color:"white" }}
-            fullWidth
-          >
-            Login
-          </Button>
-        </Stack>
-      </Box>
+        <Typography
+          variant="h5"
+          sx={{ mb: 2, fontWeight: 600, textAlign: "center", color: "#333" }}
+        >
+          Login to your account
+        </Typography>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
+          <Stack spacing={2}>
+            <TextField
+              label="Username"
+              variant="outlined"
+              fullWidth
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                backgroundColor: "#1cc9a4",
+                fontWeight: 600,
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "#159e83",
+                },
+              }}
+            >
+              Login
+            </Button>
+            <Link
+              href="#"
+              variant="body2"
+              sx={{ textAlign: "center", color: "#616161" }}
+            >
+              Forgot password?
+            </Link>
+            <Link
+              href="#"
+              variant="body2"
+              sx={{ textAlign: "center", color: "#616161" }}
+            >
+              Don’t have an account? Register
+            </Link>
+          </Stack>
+        </form>
+      </Paper>
     </Box>
   );
 };
