@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
   TableBody,
   Typography,
   TablePagination,
+  TextField,
 } from "@mui/material";
 import Navbar from "../components/appBar";
 import { employeeList } from "../utils";
@@ -25,7 +26,8 @@ const EmployeeList: FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const [searchQuery, setSearchQuery] = useState(""); // ✅
+  const [filter, setFilter] = useState(employeeList);
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -35,6 +37,20 @@ const EmployeeList: FC = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  // let filteredEmployees
+
+  useEffect(() => {
+    console.log("searchQuery", searchQuery);
+    setFilter([]);
+    const filteredEmployees = employeeList.filter(
+      (employee) =>
+        employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (employee.phone && employee.phone.includes(searchQuery)) ||
+        (employee.email && employee.email.includes(searchQuery))
+    );
+    setFilter(filteredEmployees);
+  }, [searchQuery]);
+
   const paginatedEmployees = employeeList.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -90,27 +106,49 @@ const EmployeeList: FC = () => {
           >
             Employee List
           </Typography>
-
-          <Button
-            variant="contained"
-            onClick={() => navigate("/addEmployee")}
+          <Box
             sx={{
-              backgroundColor: "#195a63",
-              color: "#fff",
-              textTransform: "none",
-              fontWeight: 500,
-              px: 3,
-              py: 1,
-              borderRadius: "8px",
-              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-              width: { xs: "100%", sm: "auto" },
-              "&:hover": {
-                backgroundColor: "#287177",
-              },
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              gap: 2,
+              width: "100%",
+              maxWidth: "500px",
             }}
           >
-            Add Employee
-          </Button>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search by name or phone or email"
+              size="small"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery("");
+                setSearchQuery(e.target.value);
+              }}
+            />
+            <Box component={"div"} sx={{ width: "50%" }}>
+              <Button
+                variant="contained"
+                onClick={() => navigate("/addEmployee")}
+                sx={{
+                  backgroundColor: "#195a63",
+                  color: "#fff",
+                  textTransform: "none",
+                  fontWeight: 500,
+                  px: 3,
+                  py: 1,
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                  width: { xs: "100%", sm: "auto" },
+                  "&:hover": {
+                    backgroundColor: "#287177",
+                  },
+                }}
+              >
+                Add Employee
+              </Button>
+            </Box>
+          </Box>
         </Box>
 
         <TableContainer
@@ -156,57 +194,121 @@ const EmployeeList: FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedEmployees.map((employee: any, index: number) => (
-                <TableRow
-                  key={employee.id}
-                  sx={{
-                    backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9f9f9",
-                    transition: "background-color 0.3s",
-                    "&:hover": {
-                      backgroundColor: "#eef6f8",
-                    },
-                  }}
-                >
-                  <TableCell align="center">{employee.id}</TableCell>
-                  <TableCell align="center">{employee.name}</TableCell>
-                  <TableCell align="center">{employee.email}</TableCell>
-                  <TableCell align="center">{employee.jobRole}</TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      color: employee.onLeave ? "#d32f2f" : "#388e3c",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {employee.onLeave ? "Yes" : "No"}
-                  </TableCell>
-                  <TableCell align="center">{employee.dateOfJoining}</TableCell>
-
-                  <TableCell align="center">
-                    <Button
-                      variant="contained"
-                      size="small"
+              {searchQuery ? (
+                <>
+                  {filter.map((employee: any, index: number) => (
+                    <TableRow
+                      key={employee.id}
                       sx={{
-                        backgroundColor: "#195a63",
-                        color: "#fff",
-                        textTransform: "none",
-                        fontWeight: 500,
-                        px: 2.5,
-                        py: 0.5,
-                        borderRadius: "6px",
+                        backgroundColor:
+                          index % 2 === 0 ? "#ffffff" : "#f9f9f9",
+                        transition: "background-color 0.3s",
                         "&:hover": {
-                          backgroundColor: "#287177",
+                          backgroundColor: "#eef6f8",
                         },
                       }}
-                      onClick={() =>
-                        navigate(`/employeeDetails/${employee.id}`)
-                      }
                     >
-                      View
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      <TableCell align="center">{employee.id}</TableCell>
+                      <TableCell align="center">{employee.name}</TableCell>
+                      <TableCell align="center">{employee.email}</TableCell>
+                      <TableCell align="center">{employee.jobRole}</TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          color: employee.onLeave ? "#d32f2f" : "#388e3c",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {employee.onLeave ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell align="center">
+                        {employee.dateOfJoining}
+                      </TableCell>
+
+                      <TableCell align="center">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          sx={{
+                            backgroundColor: "#195a63",
+                            color: "#fff",
+                            textTransform: "none",
+                            fontWeight: 500,
+                            px: 2.5,
+                            py: 0.5,
+                            borderRadius: "6px",
+                            "&:hover": {
+                              backgroundColor: "#287177",
+                            },
+                          }}
+                          onClick={() =>
+                            navigate(`/employeeDetails/${employee.id}`)
+                          }
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {paginatedEmployees.map((employee: any, index: number) => (
+                    <TableRow
+                      key={employee.id}
+                      sx={{
+                        backgroundColor:
+                          index % 2 === 0 ? "#ffffff" : "#f9f9f9",
+                        transition: "background-color 0.3s",
+                        "&:hover": {
+                          backgroundColor: "#eef6f8",
+                        },
+                      }}
+                    >
+                      <TableCell align="center">{employee.id}</TableCell>
+                      <TableCell align="center">{employee.name}</TableCell>
+                      <TableCell align="center">{employee.email}</TableCell>
+                      <TableCell align="center">{employee.jobRole}</TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          color: employee.onLeave ? "#d32f2f" : "#388e3c",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {employee.onLeave ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell align="center">
+                        {employee.dateOfJoining}
+                      </TableCell>
+
+                      <TableCell align="center">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          sx={{
+                            backgroundColor: "#195a63",
+                            color: "#fff",
+                            textTransform: "none",
+                            fontWeight: 500,
+                            px: 2.5,
+                            py: 0.5,
+                            borderRadius: "6px",
+                            "&:hover": {
+                              backgroundColor: "#287177",
+                            },
+                          }}
+                          onClick={() =>
+                            navigate(`/employeeDetails/${employee.id}`)
+                          }
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

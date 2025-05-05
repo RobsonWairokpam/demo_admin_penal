@@ -2,9 +2,13 @@ import { FC, useState } from "react";
 import Navbar from "../components/appBar";
 import {
   Box,
+  Button,
   Card,
   FormControl,
+  FormControlLabel,
   MenuItem,
+  Radio,
+  RadioGroup,
   Select,
   SelectChangeEvent,
   TextField,
@@ -34,17 +38,19 @@ const AddEmployee: FC = () => {
     maritualStatus: "",
     dateOfBirth: "",
     religion: "",
-    cast:"",
+    cast: "",
     profilePhoto: null as File | null,
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent
   ) => {
     const target = e.target as HTMLInputElement;
     const { name, value } = target;
-  
+
     if (target.type === "file" && target.files) {
       const file = target.files[0];
       setFormData((prev) => ({ ...prev, [name]: file }));
@@ -69,7 +75,7 @@ const AddEmployee: FC = () => {
     {
       label: "Role",
       name: "role",
-      type: "select",
+      type: "radio",
       options: ["hr", "employee"],
     },
     {
@@ -96,7 +102,8 @@ const AddEmployee: FC = () => {
     {
       label: "Religion",
       name: "religion",
-    },  {
+    },
+    {
       label: "Cast",
       name: "cast",
     },
@@ -218,8 +225,11 @@ const AddEmployee: FC = () => {
                           <Select
                             size="small"
                             name={field.name}
-                            value={(formData[field.name as keyof typeof formData] as string) || ""}
-
+                            value={
+                              (formData[
+                                field.name as keyof typeof formData
+                              ] as string) || ""
+                            }
                             onChange={handleChange}
                           >
                             {field.options?.map((option) => (
@@ -228,6 +238,24 @@ const AddEmployee: FC = () => {
                               </MenuItem>
                             ))}
                           </Select>
+                        </FormControl>
+                      ) : field.type === "radio" ? (
+                        <FormControl>
+                          <RadioGroup
+                            row
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                          >
+                            {field.options?.map((option) => (
+                              <FormControlLabel
+                                key={option}
+                                value={option}
+                                control={<Radio />}
+                                label={option}
+                              />
+                            ))}
+                          </RadioGroup>
                         </FormControl>
                       ) : (
                         <TextField
@@ -247,6 +275,29 @@ const AddEmployee: FC = () => {
                   </Box>
                 ))}
               </Box>
+              {/* <Grid size={{ xs: 12 }}> */}
+              <Box component={"div"} mt={4}>
+                {" "}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  // fullWidth
+                  sx={{
+                    py: 1.5,
+                    fontWeight: 600,
+                    textTransform: "capitalize",
+                    backgroundColor: "#0d47a1",
+                    "&:hover": {
+                      backgroundColor: "#1565c0",
+                    },
+                  }}
+                >
+                  Submit
+                </Button>
+              </Box>
+
+              {/* </Grid> */}
+              {/* </Grid> */}
             </Card>
           </Box>
         </Box>
