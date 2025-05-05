@@ -108,8 +108,19 @@ const Navbar: FC = () => {
       case "Dashboard":
         navigate(isAdmin ? "/adminDashBoard" : "/employeeDashBoard");
         break;
+      // case "Employees":
+      //   setEmployeesOpen((prev) => !prev);
+      //   break;
       case "Employees":
-        setEmployeesOpen((prev) => !prev);
+        const currentPath = location.pathname;
+        const isChildActive = drawerDataAdmin
+          .find((s) => s.section === "Master")
+          ?.items.find((i) => i.name === "Employees")
+          ?.children?.some((child) => child.path === currentPath);
+
+        if (!isChildActive) {
+          setEmployeesOpen((prev) => !prev);
+        }
         break;
     }
     if (isMobile) setMobileOpen(false); // Close drawer on nav

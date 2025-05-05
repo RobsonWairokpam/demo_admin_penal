@@ -2,13 +2,11 @@ import { FC, useState } from "react";
 import Navbar from "../components/appBar";
 import {
   Box,
-  Button,
   Card,
   FormControl,
-  Grid,
-  InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   TextField,
   Toolbar,
   Typography,
@@ -17,23 +15,93 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import HomeIcon from "@mui/icons-material/Home";
 const AddEmployee: FC = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [jobRole, setJobRole] = useState("");
-  const [dateOfJoining, setDateOfJoining] = useState("");
-
   const location = useLocation();
   const path = location.pathname.replace("/", "");
 
   const navigate = useNavigate();
   const drawerWidth = 240;
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    role: "",
+    jobRole: "",
+    dateOfJoining: "",
+    gender: "",
+    address: "",
+    phone: "",
+    nationality: "",
+    maritualStatus: "",
+    dateOfBirth: "",
+    religion: "",
+    cast:"",
+    profilePhoto: null as File | null,
+  });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent
+  ) => {
+    const target = e.target as HTMLInputElement;
+    const { name, value } = target;
+  
+    if (target.type === "file" && target.files) {
+      const file = target.files[0];
+      setFormData((prev) => ({ ...prev, [name]: file }));
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
   const handleSubmit = () => {
-    console.log("employeeList", name, email, role, jobRole);
+    // console.log("employeeList", name, email, role, jobRole);
 
     navigate("/adminDashboard");
   };
+  console.log({ Datatata: formData });
+  const inputFields = [
+    { label: "Name", name: "name" },
+    { label: "Email", name: "email" },
+    { label: "Job Role", name: "jobRole" },
+    { label: "Date Of Joining", name: "dateOfJoining", type: "date" },
+    { label: "Passport Photo", name: "profilePhoto", type: "file" },
+    {
+      label: "Role",
+      name: "role",
+      type: "select",
+      options: ["hr", "employee"],
+    },
+    {
+      label: "Gender",
+      name: "gender",
+      type: "select",
+      options: ["Male", "Female", "Other"],
+    },
+    { label: "Address", name: "address" },
+    { label: "Phone", name: "phone" },
+    { label: "Date Of Birth", name: "dateOfBirth", type: "date" },
+    {
+      label: "Marital Status",
+      name: "maritualStatus",
+      type: "select",
+      options: ["Single", "Married", "UnMarried", "Divorce"],
+    },
+    {
+      label: "Nationality",
+      name: "nationality",
+      type: "select",
+      options: ["India", "America", "Other"],
+    },
+    {
+      label: "Religion",
+      name: "religion",
+    },  {
+      label: "Cast",
+      name: "cast",
+    },
+  ];
+
   return (
     <Box sx={{ display: "flex" }}>
       <Navbar />
@@ -50,133 +118,137 @@ const AddEmployee: FC = () => {
           },
         }}
       >
-        <Toolbar />
-
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 4 }}>
-          <ArrowBackIcon
-            sx={{ cursor: "pointer" }}
-            onClick={() => navigate(-1)}
-          />
-          <HomeIcon
-            sx={{ cursor: "pointer" }}
-            onClick={() => navigate("/adminDashboard")}
-          />
-          <Typography variant="body1" sx={{ fontWeight: 500 }}>
-            /&nbsp;{path}
-          </Typography>
-        </Box>
+        <Toolbar />{" "}
         <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "calc(100vh - 100px)",
-            pt: { xs: 20, sm: 20, md: 0, lg: 0 },
-          }}
+          component={"div"}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
-          <Card
-            elevation={4}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, my: 4 }}>
+            <ArrowBackIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => navigate(-1)}
+            />
+            <HomeIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => navigate("/adminDashboard")}
+            />
+            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              /&nbsp;{path}
+            </Typography>
+          </Box>
+          <Box
             sx={{
-              width: { xs: "90%", sm: "90%", md: "80%", lg: "70%" },
-              p: 4,
-              backgroundColor: "white",
-              borderRadius: 3,
-              boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              // height: "calc(100vh - 100px)",
+              // minHeight: "calc(100vh - 100px)",
+              minHeight: "80vh",
+
+              // pt: { xs: 20, sm: 20, md: 0, lg: 0 },
             }}
           >
-            <Typography
-              variant="h5"
-              sx={{ mb: 3, fontWeight: 600, color: "#0d47a1" }}
+            <Card
+              elevation={4}
+              sx={{
+                // width: { xs: "90%", sm: "90%", md: "80%", lg: "70%" },
+                width: "100%",
+                p: 4,
+                backgroundColor: "white",
+                borderRadius: 3,
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+              }}
             >
-              Add New Employee
-            </Typography>
+              <Typography
+                variant="h5"
+                sx={{ mb: 3, fontWeight: 600, color: "#0d47a1" }}
+              >
+                Add New Employee
+              </Typography>
 
-            <Box component="form" onSubmit={handleSubmit}>
-              <Grid container spacing={3}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    label="Name"
-                    variant="outlined"
-                    fullWidth
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    label="Email"
-                    variant="outlined"
-                    fullWidth
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  {/* <TextField
-                    label="Role"
-                    type="select"
-                    variant="outlined"
-                    fullWidth
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                  /> */}
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel id="role-label">Role</InputLabel>
-                    <Select
-                      labelId="role-label"
-                      id="role"
-                      value={role}
-                      label="Role"
-                      onChange={(e) => setRole(e.target.value)}
-                    >
-                      <MenuItem value={"hr"}>HR</MenuItem>
-                      <MenuItem value={20}>Employee</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    label="Job Role"
-                    variant="outlined"
-                    fullWidth
-                    value={jobRole}
-                    onChange={(e) => setJobRole(e.target.value)}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    label="Date of Joining"
-                    variant="outlined"
-                    fullWidth
-                    type="date"
-                    value={dateOfJoining}
-                    InputLabelProps={{
-                      shrink: true, // ensures the label doesn't overlap the date value
-                    }}
-                    onChange={(e) => setDateOfJoining(e.target.value)}
-                  />
-                </Grid>
-                <Grid size={{ xs: 12 }} sx={{ mt: 2 }}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    fullWidth
+              <Box component="form" onSubmit={handleSubmit}>
+                {inputFields.map((field) => (
+                  <Box
+                    key={field.name}
                     sx={{
-                      py: 1.5,
-                      fontWeight: 600,
-                      textTransform: "capitalize",
-                      backgroundColor: "#0d47a1",
-                      "&:hover": {
-                        backgroundColor: "#1565c0",
-                      },
+                      display: "flex",
+                      alignItems: "center",
+                      mb: 2,
+                      gap: 2,
+                      flexDirection: "column",
                     }}
                   >
-                    Submit
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-          </Card>
+                    <Box sx={{ width: "100%" }}>
+                      <Typography sx={{ fontWeight: 500 }}>
+                        {field.label}:
+                      </Typography>
+                      {field.name === "profilePhoto" && imagePreview && (
+                        <Box mt={2}>
+                          <Typography variant="subtitle2">
+                            Image Preview:
+                          </Typography>
+                          <img
+                            src={imagePreview}
+                            alt="Preview"
+                            style={{
+                              width: 150,
+                              height: "auto",
+                              borderRadius: 8,
+                              border: "1px solid #ccc",
+                              marginTop: 8,
+                            }}
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                    <Box sx={{ width: "100%" }}>
+                      {field.type === "file" ? (
+                        <TextField
+                          fullWidth
+                          size="small"
+                          variant="outlined"
+                          required
+                          name={field.name}
+                          type="file"
+                          onChange={handleChange}
+                          inputProps={{ accept: "image/*" }} // Optional: restrict to images
+                        />
+                      ) : field.type === "select" ? (
+                        <FormControl fullWidth variant="outlined">
+                          <Select
+                            size="small"
+                            name={field.name}
+                            value={(formData[field.name as keyof typeof formData] as string) || ""}
+
+                            onChange={handleChange}
+                          >
+                            {field.options?.map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      ) : (
+                        <TextField
+                          fullWidth
+                          size="small"
+                          variant="outlined"
+                          required
+                          name={field.name}
+                          type={field.type || "text"}
+                          value={
+                            formData[field.name as keyof typeof formData] || ""
+                          }
+                          onChange={handleChange}
+                        />
+                      )}
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Card>
+          </Box>
         </Box>
       </Box>
     </Box>

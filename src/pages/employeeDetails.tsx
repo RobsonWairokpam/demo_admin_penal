@@ -37,6 +37,8 @@ const EmployeeDetails: FC = () => {
       item.status === "Pending" &&
       item.date >= new Date().toISOString().split("T")[0]
   );
+  const capitalizeFirst = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -65,35 +67,12 @@ const EmployeeDetails: FC = () => {
             /&nbsp;{path}
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-          {pendingLeaves?.length !== 0 && (
-            <Button
-              onClick={handleOpen}
-              variant="contained"
-              sx={{
-                backgroundColor: "#0d47a1",
-                textTransform: "none",
-                fontWeight: 600,
-                "&:hover": {
-                  backgroundColor: "#1565c0",
-                },
-              }}
-            >
-              Pending Leaves&nbsp;
-              <Typography component="span">
-                ({pendingLeaves?.length})
-              </Typography>
-            </Button>
-          )}
-        </Box>
-
-        <Card
-          elevation={4}
+        <Box
           sx={{
-            p: 4,
-            borderRadius: 3,
-            backgroundColor: "#ffffff",
-            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 2,
+            flexDirection: { xs: "column", sm: "row" },
           }}
         >
           <Typography
@@ -102,46 +81,408 @@ const EmployeeDetails: FC = () => {
               mb: 3,
               fontWeight: 600,
               color: "#0d47a1",
-              borderBottom: 1,
+              // borderBottom: 1,
               pb: 1,
             }}
           >
-            {employee?.name} - Employee Details
+            {employee?.name && capitalizeFirst(employee.name)} Details
           </Typography>
-
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="subtitle1">
-                <strong>Name:</strong> {employee?.name}
+          {pendingLeaves?.length !== 0 && (
+            <Box component={"div"}>
+              {" "}
+              <Button
+                onClick={handleOpen}
+                variant="contained"
+                size="small"
+                sx={{
+                  backgroundColor: "#0d47a1",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: "#1565c0",
+                  },
+                }}
+              >
+                Pending Leaves&nbsp;
+                <Typography component="span">
+                  ({pendingLeaves?.length})
+                </Typography>
+              </Button>
+            </Box>
+          )}
+        </Box>
+        <Grid container spacing={3} >
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Card
+              elevation={4}
+              sx={{
+                p: 4,
+                borderRadius: 3,
+                backgroundColor: "#ffffff",
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src="/profile.jpg"
+                  alt="logo"
+                  width={130}
+                  height={130}
+                  style={{
+                    cursor: "pointer",
+                    borderRadius: "50%",
+                    border: "2px solid #1976d2", // Optional: color border
+                    objectFit: "cover", // Keeps image inside circle
+                  }}
+                />
+                <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                  {employee?.name && capitalizeFirst(employee.name)}
+                </Typography>
+                <Button variant="contained" size="small" sx={{ mt: 2 }}>
+                  Message
+                </Button>
+              </Box>
+            </Card>
+            <Card
+              elevation={4}
+              sx={{
+                p: 4,
+                mt: 4,
+                borderRadius: 3,
+                backgroundColor: "#ffffff",
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  // mb: 3,
+                  fontWeight: 600,
+                  color: "#0d47a1",
+                  borderBottom: 1,
+                  pb: 1,
+                }}
+              >
+                Info
               </Typography>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="subtitle1">
-                <strong>Email:</strong> {employee?.email}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="subtitle1">
-                <strong>Job Role:</strong> {employee?.jobRole}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="subtitle1">
-                <strong>Role:</strong> {employee?.role}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="subtitle1">
-                <strong>On Leave:</strong> {employee?.onLeave ? "Yes" : "No"}
-              </Typography>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Typography variant="subtitle1">
-                <strong>Leaves Taken:</strong> {leaves?.length}
-              </Typography>
-            </Grid>
+              <Box component={"div"}>
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderBottom: 1,
+                    py: 1,
+                    color: "gray",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Name:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.name && capitalizeFirst(employee.name)}
+                  </Typography>
+                </Box>
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderBottom: 1,
+                    py: 1,
+                    color: "gray",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Address:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.address}
+                  </Typography>
+                </Box>{" "}
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderBottom: 1,
+                    py: 1,
+                    color: "gray",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Date Of Birth:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.dateOfBirth}
+                  </Typography>
+                </Box>{" "}
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderBottom: 1,
+                    py: 1,
+                    color: "gray",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Gender:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.gender}
+                  </Typography>
+                </Box>{" "}
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderBottom: 1,
+                    py: 1,
+                    color: "gray",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Natinality:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.nationality}
+                  </Typography>
+                </Box>{" "}
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderBottom: 1,
+                    py: 1,
+                    color: "gray",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Maritual Status:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.maritualStatus}
+                  </Typography>
+                </Box>{" "}
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    borderBottom: 1,
+                    py: 1,
+                    color: "gray",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Religion:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.religion}
+                  </Typography>
+                </Box>{" "}
+              </Box>
+            </Card>
           </Grid>
-        </Card>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Card
+              elevation={4}
+              sx={{
+                p: 4,
+                borderRadius: 3,
+                backgroundColor: "#ffffff",
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 3,
+                  fontWeight: 600,
+                  color: "#0d47a1",
+                  // borderBottom: 1,
+                  pb: 1,
+                }}
+              >
+                Status
+              </Typography>
+
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  borderBottom: 1,
+                  py: 1,
+                  color: "gray",
+                }}
+              >
+                <Typography component={"div"} color={"gray"}>
+                  Date Of Joining:&nbsp;
+                </Typography>
+                <Typography component={"span"} color="black" variant="body2">
+                  {employee?.dateOfJoining}
+                </Typography>
+              </Box>
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  borderBottom: 1,
+                  py: 1,
+                  color: "gray",
+                }}
+              >
+                <Typography component={"div"} color={"gray"}>
+                  On Leave:&nbsp;
+                </Typography>
+                <Typography component={"span"} color="black" variant="body2">
+                  {employee?.onLeave ? "Yes" : "No"}
+                </Typography>
+              </Box>
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  borderBottom: 1,
+                  py: 1,
+                  color: "gray",
+                }}
+              >
+                <Typography component={"div"} color={"gray"}>
+                  Role:&nbsp;
+                </Typography>
+                <Typography component={"span"} color="black" variant="body2">
+                  {employee?.role && capitalizeFirst(employee?.role)}
+                </Typography>
+              </Box>
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  borderBottom: 1,
+                  py: 1,
+                  color: "gray",
+                }}
+              >
+                <Typography component={"div"} color={"gray"}>
+                  Job Role:&nbsp;
+                </Typography>
+                <Typography component={"span"} color="black" variant="body2">
+                  {employee?.jobRole}
+                </Typography>
+              </Box>
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  borderBottom: 1,
+                  py: 1,
+                  color: "gray",
+                }}
+              >
+                <Typography component={"div"} color={"gray"}>
+                  Leave Taken:&nbsp;
+                </Typography>
+                <Typography component={"span"} color="black" variant="body2">
+                  {leaves?.length}
+                </Typography>
+              </Box>
+            </Card>
+            <Card
+              elevation={4}
+              sx={{
+                p: 4,
+                mt: 4,
+                borderRadius: 3,
+                backgroundColor: "#ffffff",
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 3,
+                  fontWeight: 600,
+                  color: "#0d47a1",
+                  // borderBottom: 1,
+                  pb: 1,
+                }}
+              >
+                Contact Info
+              </Typography>
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  borderBottom: 1,
+                  py: 1,
+                  color: "gray",
+                }}
+              >
+                <Typography component={"div"} color={"gray"}>
+                  Phone:&nbsp;
+                </Typography>
+                <Typography component={"span"} color="black" variant="body2">
+                  {employee?.phone}
+                </Typography>
+              </Box>
+              <Box
+                component={"div"}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  borderBottom: 1,
+                  py: 1,
+                  color: "gray",
+                }}
+              >
+                <Box
+                  component={"div"}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Typography component={"div"} color={"gray"}>
+                    Email:&nbsp;
+                  </Typography>
+                  <Typography component={"span"} color="black" variant="body2">
+                    {employee?.email}
+                  </Typography>
+                </Box>{" "}
+                {employee?.email && (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{ mt: 1, alignSelf: "flex-start" }}
+                    href={`mailto:${employee.email}`}
+                  >
+                    Send Mail
+                  </Button>
+                )}
+              </Box>
+            </Card>
+          </Grid>
+        </Grid>
 
         {/* Modal for Pending Leaves */}
         <Modal open={open} onClose={handleClose}>
