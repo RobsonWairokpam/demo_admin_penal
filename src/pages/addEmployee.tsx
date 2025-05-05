@@ -6,6 +6,7 @@ import {
   Card,
   FormControl,
   FormControlLabel,
+  Grid,
   MenuItem,
   Radio,
   RadioGroup,
@@ -67,16 +68,15 @@ const AddEmployee: FC = () => {
   };
   console.log({ Datatata: formData });
   const inputFields = [
-    { label: "Name", name: "name" },
-    { label: "Email", name: "email" },
-    { label: "Job Role", name: "jobRole" },
-    { label: "Date Of Joining", name: "dateOfJoining", type: "date" },
-    { label: "Passport Photo", name: "profilePhoto", type: "file" },
+    { label: "Name", name: "name", required: true },
+    { label: "Email", name: "email", required: true },
+    { label: "Address", name: "address", required: true },
+    { label: "Phone", name: "phone", required: true },
     {
-      label: "Role",
-      name: "role",
-      type: "radio",
-      options: ["hr", "employee"],
+      label: "Date Of Birth",
+      name: "dateOfBirth",
+      type: "date",
+      required: true,
     },
     {
       label: "Gender",
@@ -84,9 +84,6 @@ const AddEmployee: FC = () => {
       type: "select",
       options: ["Male", "Female", "Other"],
     },
-    { label: "Address", name: "address" },
-    { label: "Phone", name: "phone" },
-    { label: "Date Of Birth", name: "dateOfBirth", type: "date" },
     {
       label: "Marital Status",
       name: "maritualStatus",
@@ -107,6 +104,16 @@ const AddEmployee: FC = () => {
       label: "Cast",
       name: "cast",
     },
+    { label: "Job Role", name: "jobRole" },
+    { label: "Date Of Joining", name: "dateOfJoining", type: "date" },
+    {
+      label: "Role",
+      name: "role",
+      type: "radio",
+      options: ["hr", "employee"],
+    },
+
+    { label: "Passport Photo", name: "profilePhoto", type: "file" },
   ];
 
   return (
@@ -174,23 +181,18 @@ const AddEmployee: FC = () => {
               </Typography>
 
               <Box component="form" onSubmit={handleSubmit}>
-                {inputFields.map((field) => (
-                  <Box
-                    key={field.name}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      mb: 2,
-                      gap: 2,
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Box sx={{ width: "100%" }}>
-                      <Typography sx={{ fontWeight: 500 }}>
-                        {field.label}:
+                <Grid container spacing={3}>
+                  {inputFields.map((field) => (
+                    <Grid size={{ xs: 12, md: 6, lg: 4 }} key={field.name}>
+                      <Typography sx={{ fontWeight: 500, mb: 1 }}>
+                        {field.label} &nbsp;
+                        {field.required && (
+                          <span style={{ color: "red" }}>*</span>
+                        )}
                       </Typography>
+
                       {field.name === "profilePhoto" && imagePreview && (
-                        <Box mt={2}>
+                        <Box mb={2}>
                           <Typography variant="subtitle2">
                             Image Preview:
                           </Typography>
@@ -207,18 +209,17 @@ const AddEmployee: FC = () => {
                           />
                         </Box>
                       )}
-                    </Box>
-                    <Box sx={{ width: "100%" }}>
+
                       {field.type === "file" ? (
                         <TextField
                           fullWidth
                           size="small"
                           variant="outlined"
-                          required
+                          required={field.required ? true : false}
                           name={field.name}
                           type="file"
                           onChange={handleChange}
-                          inputProps={{ accept: "image/*" }} // Optional: restrict to images
+                          inputProps={{ accept: "image/*" }}
                         />
                       ) : field.type === "select" ? (
                         <FormControl fullWidth variant="outlined">
@@ -243,8 +244,10 @@ const AddEmployee: FC = () => {
                         <FormControl>
                           <RadioGroup
                             row
-                            name="role"
-                            value={formData.role}
+                            name={field.name}
+                            value={
+                              formData[field.name as keyof typeof formData]
+                            }
                             onChange={handleChange}
                           >
                             {field.options?.map((option) => (
@@ -262,7 +265,7 @@ const AddEmployee: FC = () => {
                           fullWidth
                           size="small"
                           variant="outlined"
-                          required
+                          required={field.required ? true : false}
                           name={field.name}
                           type={field.type || "text"}
                           value={
@@ -271,9 +274,9 @@ const AddEmployee: FC = () => {
                           onChange={handleChange}
                         />
                       )}
-                    </Box>
-                  </Box>
-                ))}
+                    </Grid>
+                  ))}
+                </Grid>
               </Box>
               {/* <Grid size={{ xs: 12 }}> */}
               <Box component={"div"} mt={4}>

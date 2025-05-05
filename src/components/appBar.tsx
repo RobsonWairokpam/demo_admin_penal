@@ -13,6 +13,10 @@ import {
   Divider,
   IconButton,
   useMediaQuery,
+  Modal,
+  Card,
+  Popover,
+  Badge,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -20,6 +24,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
 const drawerWidth = 240;
 
@@ -75,11 +80,21 @@ const Navbar: FC = () => {
 
   const isAdmin = role === "admin";
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [employeesOpen, setEmployeesOpen] = useState(false);
+  const [notificationAnchor, setNotificationAnchor] =
+    useState<null | HTMLElement>(null);
+  const handleNotificationClick = (event: React.MouseEvent<HTMLElement>) => {
+    setNotificationAnchor(event.currentTarget);
+  };
 
+  const handleNotificationClose = () => {
+    setNotificationAnchor(null);
+  };
+
+  const isNotificationOpen = Boolean(notificationAnchor);
   const toggleDrawer = () => {
     setMobileOpen((prev) => !prev);
   };
@@ -220,7 +235,7 @@ const Navbar: FC = () => {
                               backgroundColor: "#f1f1f1",
                             },
                             "&.Mui-selected": {
-                              backgroundColor: "#dcedc8",
+                              backgroundColor: "#e9f1f4",
                               color: "#33691e",
                             },
                           }}
@@ -293,28 +308,138 @@ const Navbar: FC = () => {
             </Box>
             {/* {isAdmin ? "Admin Dashboard" : "Employee Dashboard"} */}
           </Box>
-
-          <Button
-            variant="outlined"
-            size="small"
-            sx={{
-              textTransform: "none",
-              fontWeight: 600,
-              borderRadius: 3,
-              px: 3,
-              py: 1,
-              color: "#244D59",
-              borderColor: "#244D59",
-              "&:hover": {
-                backgroundColor: "#244D59",
-                color: "#fff",
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Box>
+              <IconButton onClick={handleNotificationClick} size="large">
+                <Badge
+                  color="success"
+                  variant="dot"
+                  // overlap="circular"
+                  invisible={false} // This should be true if there are new notifications
+                >
+                  <NotificationsNoneIcon />
+                </Badge>
+              </IconButton>
+            </Box>
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: 3,
+                px: 3,
+                py: 1,
+                color: "#244D59",
+                borderColor: "#244D59",
+                "&:hover": {
+                  backgroundColor: "#244D59",
+                  color: "#fff",
+                },
+              }}
+              onClick={() => handleNavClick("logout")}
+            >
+              Log out
+            </Button>
+          </Box>
+        </Toolbar>
+        {notificationAnchor && (
+          <Popover
+            open={isNotificationOpen}
+            anchorEl={notificationAnchor}
+            onClose={handleNotificationClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            PaperProps={{
+              sx: {
+                width: 400,
+                p: 2,
+                borderRadius: 2,
+                boxShadow: 3,
               },
             }}
-            onClick={() => handleNavClick("logout")}
           >
-            Log out
-          </Button>
-        </Toolbar>
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+              You have 4 new Notifications
+            </Typography>
+            <Box
+              p={1}
+              sx={{
+                borderTop: "1px solid #e0e5e9",
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "#e0e5e9",
+                },
+              }}
+            >
+              <Typography variant="body2">
+                You have 4 new Notifications
+              </Typography>{" "}
+              <Typography variant="body2">03:00 Pm Today</Typography>{" "}
+            </Box>
+            <Box
+              p={1}
+              sx={{
+                borderTop: "1px solid #e0e5e9",
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "#e0e5e9",
+                },
+              }}
+            >
+              <Typography variant="body2">
+                You have 4 new Notifications
+              </Typography>{" "}
+              <Typography variant="body2">11:40 Am Today</Typography>{" "}
+            </Box>
+            <Box
+              p={1}
+              sx={{
+                borderTop: "1px solid #e0e5e9",
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "#e0e5e9",
+                },
+              }}
+            >
+              <Typography variant="body2">
+                You have 4 new Notifications
+              </Typography>{" "}
+              <Typography variant="body2">10:00 Am Today</Typography>{" "}
+            </Box>
+            <Box
+              p={1}
+              sx={{
+                borderTop: "1px solid #e0e5e9",
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "#e0e5e9",
+                },
+              }}
+            >
+              <Typography variant="body2">
+                You have 4 new Notifications
+              </Typography>{" "}
+              <Typography variant="body2">Yesterday</Typography>{" "}
+            </Box>
+            <Box
+              sx={{
+                borderTop: "1px solid #e0e5e9",
+                display: "flex",
+                justifyContent: "end",
+                mt: 0.5,
+              }}
+            >
+              <Button sx={{ textTransform: "none" }}>see more...</Button>
+            </Box>
+          </Popover>
+        )}
       </AppBar>
 
       {/* Mobile Drawer */}
@@ -326,7 +451,7 @@ const Navbar: FC = () => {
           keepMounted: true,
         }}
         sx={{
-          display: { xs: "block", sm: "none" },
+          display: { xs: "block", sm: "block", md: "none" },
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             backgroundColor: "#fafafa",
@@ -341,7 +466,7 @@ const Navbar: FC = () => {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: "none", sm: "block" },
+          display: { xs: "none", sm: "none", md: "block" },
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             border: "none",

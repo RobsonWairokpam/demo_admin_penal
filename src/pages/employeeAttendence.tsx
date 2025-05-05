@@ -10,13 +10,17 @@ import {
   Paper,
   Toolbar,
   TablePagination,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { employeeList } from "../utils";
 import Navbar from "../components/appBar";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import HomeIcon from "@mui/icons-material/Home";
 import { useLocation, useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+
 //   import { employeeList } from "../data/employeeList"; // Adjust import path
 const drawerWidth = 240;
 const EmployeeAttendance: FC = () => {
@@ -25,7 +29,8 @@ const EmployeeAttendance: FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // Extract all unique dates from all employee attendance
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState(employeeList);
   const allDates = Array.from(
     new Set(
       employeeList.flatMap((emp: any) =>
@@ -44,6 +49,19 @@ const EmployeeAttendance: FC = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  useEffect(() => {
+    console.log("searchQuery", searchQuery);
+    setFilter([]);
+    const filteredEmployees = employeeList.filter(
+      (employee) =>
+        employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (employee.phone && employee.phone.includes(searchQuery)) ||
+        (employee.email && employee.email.includes(searchQuery))
+    );
+    setFilter(filteredEmployees);
+  }, [searchQuery]);
+
   const paginatedEmployees = employeeList.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -81,25 +99,49 @@ const EmployeeAttendance: FC = () => {
             /&nbsp;{path}
           </Typography>
         </Box>
-        <Box sx={{ mb: 3 }}>
+        <Box
+          sx={{
+            mb: 3,
+            display: "flex",
+            flexDirection: { xs: "column", sm: "column", md: "row", lg: "row" },
+          }}
+        >
           <Typography variant="h4" fontWeight={600}>
             Employee Attendance
           </Typography>
+          <TextField
+            variant="outlined"
+            placeholder="Search by name or phone or email"
+            size="small"
+            sx={{
+              mx: { xs: 0, sm: 0, md: 4, lg: 4 },
+              mb: 3,
+              width: { xs: "80%", sm: "80%", md: "40vh", lg: "40vh" },
+            }}
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery("");
+              setSearchQuery(e.target.value);
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+          />
         </Box>
 
         <TableContainer
           component={Paper}
           sx={{
-            // maxWidth: "100%",
-            overflowX: "auto",
-            borderRadius: 2,
+            borderRadius: 3,
             boxShadow: 3,
             scrollX: "auto",
-            // overflowX: "auto",
-            // minWidth: 700,
             width: {
               xs: "40vh",
-              sm: "40vh",
+              sm: "100%",
               md: "100%",
               lg: "100%",
             },
@@ -142,67 +184,135 @@ const EmployeeAttendance: FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedEmployees.map((emp: any) => (
-                <TableRow
-                  key={`row-${emp.id}`}
-                  sx={{
-                    "&:hover": { backgroundColor: "#f0f9ff" },
-                    minWidth: 120,
-                  }}
-                >
-                  <TableCell
-                    key={`name-${emp.id}`}
-                    align="center"
-                    sx={{ fontWeight: 500, minWidth: 120 }}
-                  >
-                    {emp.name}
-                  </TableCell>
-                  <TableCell
-                    key={`email-${emp.id}`}
-                    align="center"
-                    sx={{ fontWeight: 500, minWidth: 120 }}
-                  >
-                    {emp.email}
-                  </TableCell>
-                  <TableCell
-                    key={`role-${emp.id}`}
-                    align="center"
-                    sx={{ minWidth: 120 }}
-                  >
-                    {emp.jobRole}
-                  </TableCell>
-                  {allDates.map((date) => {
-                    const record = emp.attendance.find(
-                      (a: any) => a.date === date
-                    );
-                    let status = "-";
-                    let color = "#757575";
-
-                    if (record) {
-                      if (record.status === "Present") {
-                        status = "P";
-                        color = "#2e7d32";
-                      } else if (record.status === "Absent") {
-                        status = "A";
-                        color = "#d32f2f";
-                      } else if (record.status === "Leave") {
-                        status = "L";
-                        color = "#f57c00";
-                      }
-                    }
-
-                    return (
+              {searchQuery ? (
+                <>
+                  {filter.map((emp: any) => (
+                    <TableRow
+                      key={`row-${emp.id}`}
+                      sx={{
+                        "&:hover": { backgroundColor: "#f0f9ff" },
+                        minWidth: 120,
+                      }}
+                    >
                       <TableCell
-                        key={`${emp.id}-${date}`}
+                        key={`name-${emp.id}`}
                         align="center"
-                        sx={{ color, fontWeight: 500, minWidth: 120 }}
+                        sx={{ fontWeight: 500, minWidth: 120 }}
                       >
-                        {status}
+                        {emp.name}
                       </TableCell>
-                    );
-                  })}
-                </TableRow>
-              ))}
+                      <TableCell
+                        key={`email-${emp.id}`}
+                        align="center"
+                        sx={{ fontWeight: 500, minWidth: 120 }}
+                      >
+                        {emp.email}
+                      </TableCell>
+                      <TableCell
+                        key={`role-${emp.id}`}
+                        align="center"
+                        sx={{ minWidth: 120 }}
+                      >
+                        {emp.jobRole}
+                      </TableCell>
+                      {allDates.map((date) => {
+                        const record = emp.attendance.find(
+                          (a: any) => a.date === date
+                        );
+                        let status = "-";
+                        let color = "#757575";
+
+                        if (record) {
+                          if (record.status === "Present") {
+                            status = "P";
+                            color = "#2e7d32";
+                          } else if (record.status === "Absent") {
+                            status = "A";
+                            color = "#d32f2f";
+                          } else if (record.status === "Leave") {
+                            status = "L";
+                            color = "#f57c00";
+                          }
+                        }
+
+                        return (
+                          <TableCell
+                            key={`${emp.id}-${date}`}
+                            align="center"
+                            sx={{ color, fontWeight: 500, minWidth: 120 }}
+                          >
+                            {status}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {paginatedEmployees.map((emp: any) => (
+                    <TableRow
+                      key={`row-${emp.id}`}
+                      sx={{
+                        "&:hover": { backgroundColor: "#f0f9ff" },
+                        minWidth: 120,
+                      }}
+                    >
+                      <TableCell
+                        key={`name-${emp.id}`}
+                        align="center"
+                        sx={{ fontWeight: 500, minWidth: 120 }}
+                      >
+                        {emp.name}
+                      </TableCell>
+                      <TableCell
+                        key={`email-${emp.id}`}
+                        align="center"
+                        sx={{ fontWeight: 500, minWidth: 120 }}
+                      >
+                        {emp.email}
+                      </TableCell>
+                      <TableCell
+                        key={`role-${emp.id}`}
+                        align="center"
+                        sx={{ minWidth: 120 }}
+                      >
+                        {emp.jobRole}
+                      </TableCell>
+                      {allDates.map((date) => {
+                        const record = emp.attendance.find(
+                          (a: any) => a.date === date
+                        );
+                        let status = "-";
+                        let color = "#757575";
+
+                        if (record) {
+                          if (record.status === "Present") {
+                            status = "P";
+                            color = "#2e7d32";
+                          } else if (record.status === "Absent") {
+                            status = "A";
+                            color = "#d32f2f";
+                          } else if (record.status === "Leave") {
+                            status = "L";
+                            color = "#f57c00";
+                          }
+                        }
+
+                        return (
+                          <TableCell
+                            key={`${emp.id}-${date}`}
+                            align="center"
+                            sx={{ color, fontWeight: 500, minWidth: 120 }}
+                          >
+                            {status}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

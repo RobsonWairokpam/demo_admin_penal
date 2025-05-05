@@ -147,7 +147,7 @@ const EmployeeDetails: FC = () => {
                   {employee?.name && capitalizeFirst(employee.name)}
                 </Typography>
                 <Button variant="contained" size="small" sx={{ mt: 2 }}>
-                  Message
+                  {role === "admin" ? "Message" : "Edit"}
                 </Button>
               </Box>
             </Card>

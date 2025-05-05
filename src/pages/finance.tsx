@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
@@ -9,15 +10,17 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/appBar";
 import { employeeList } from "../utils";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from "@mui/icons-material/Search";
 const drawerWidth = 240;
 
 const Finance: FC = () => {
@@ -26,6 +29,8 @@ const Finance: FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState(employeeList);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -36,6 +41,19 @@ const Finance: FC = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  useEffect(() => {
+    console.log("searchQuery", searchQuery);
+    setFilter([]);
+    const filteredEmployees = employeeList.filter(
+      (employee) =>
+        employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (employee.phone && employee.phone.includes(searchQuery)) ||
+        (employee.email && employee.email.includes(searchQuery))
+    );
+    setFilter(filteredEmployees);
+  }, [searchQuery]);
+
   const paginatedEmployees = employeeList.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -79,12 +97,63 @@ const Finance: FC = () => {
             /&nbsp;{path}
           </Typography>
         </Box>
-        <Typography
-          variant="h4"
-          sx={{ color: "#0d47a1", mb: 3, fontWeight: 600 }}
+        <Box
+          component={"div"}
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "column", md: "row", lg: "row" },
+          }}
         >
-          Employees Account Details
-        </Typography>
+          <Typography
+            variant="h4"
+            sx={{ color: "#0d47a1", mb: 3, fontWeight: 600 }}
+          >
+            Employees Account Details
+          </Typography>
+          <TextField
+            variant="outlined"
+            placeholder="Search by name or phone or email"
+            size="small"
+            sx={{
+              mx: { xs: 0, sm: 0, md: 4, lg: 4 },
+              mb: 3,
+              width: { xs: "80%", sm: "80%", md: "40vh", lg: "40vh" },
+            }}
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery("");
+              setSearchQuery(e.target.value);
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {/* <Input
+
+          size="small"
+            placeholder="Search by name, phone or email"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery("");
+              setSearchQuery(e.target.value);
+            }}
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon color="action" />
+              </InputAdornment>
+            }
+            sx={{
+              mx: { xs: 0, sm: 0, md: 4, lg: 4 },
+              mb: 3,
+              width: { xs: "80%", sm: "80%", md: "40vh", lg: "40vh" },
+            }}
+          /> */}
+        </Box>
 
         <TableContainer
           component={Paper}
@@ -94,15 +163,15 @@ const Finance: FC = () => {
             scrollX: "auto",
             // overflowX: "auto",
             // minWidth: 700,
-            width:{
+            width: {
               xs: "40vh",
-              sm: "40vh",
-              md:"100%",
-              lg:"100%"
+              sm: "100%",
+              md: "100%",
+              lg: "100%",
             },
           }}
         >
-          <Table size="small" >
+          <Table size="small">
             <TableHead sx={{ backgroundColor: "#e3f2fd" }}>
               <TableRow>
                 <TableCell
@@ -145,60 +214,128 @@ const Finance: FC = () => {
             </TableHead>
 
             <TableBody>
-              {paginatedEmployees.map((task: any) => {
-                const totalSalary =
-                  task.salaryDetails?.reduce(
-                    (total: number, entry: any) => total + Number(entry.salary),
-                    0
-                  ) ?? 0;
+              {searchQuery ? (
+                <>
+                  {filter.map((task: any) => {
+                    const totalSalary =
+                      task.salaryDetails?.reduce(
+                        (total: number, entry: any) =>
+                          total + Number(entry.salary),
+                        0
+                      ) ?? 0;
 
-                return (
-                  <TableRow
-                    key={task.id}
-                    sx={{
-                      "&:hover": { backgroundColor: "#f1f8ff" },
-                    }}
-                  >
-                    <TableCell align="center" sx={{ fontWeight: 500 }}>
-                      {task.name}
-                    </TableCell>
-                    <TableCell align="center">
-                      {task.account.accountNo ?? "-"}
-                    </TableCell>
-                    <TableCell align="center">
-                      {task.account.bankName ?? "-"}
-                    </TableCell>
-                    <TableCell align="center">
-                      {task.account.branch ?? "-"}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontWeight: 500 }}>
-                      ₹{totalSalary.toLocaleString("en-IN")}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        color={task.account.accountNo ? "primary" : "success"}
-                        onClick={() =>
-                          navigate(
-                            task.account.accountNo
-                              ? `/updateAccount/${task.id}`
-                              : `/addAccount/${task.id}`
-                          )
-                        }
+                    return (
+                      <TableRow
+                        key={task.id}
                         sx={{
-                          textTransform: "capitalize",
-                          fontWeight: 500,
-                          px: 2,
-                          minWidth: 80,
+                          "&:hover": { backgroundColor: "#f1f8ff" },
                         }}
                       >
-                        {task.account.accountNo ? "Update" : "Add"}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                        <TableCell align="center" sx={{ fontWeight: 500 }}>
+                          {task.name}
+                        </TableCell>
+                        <TableCell align="center">
+                          {task.account.accountNo ?? "-"}
+                        </TableCell>
+                        <TableCell align="center">
+                          {task.account.bankName ?? "-"}
+                        </TableCell>
+                        <TableCell align="center">
+                          {task.account.branch ?? "-"}
+                        </TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 500 }}>
+                          ₹{totalSalary.toLocaleString("en-IN")}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Button
+                            variant="contained"
+                            size="small"
+                            color={
+                              task.account.accountNo ? "primary" : "success"
+                            }
+                            onClick={() =>
+                              navigate(
+                                task.account.accountNo
+                                  ? `/updateAccount/${task.id}`
+                                  : `/addAccount/${task.id}`
+                              )
+                            }
+                            sx={{
+                              textTransform: "capitalize",
+                              fontWeight: 500,
+                              px: 2,
+                              minWidth: 80,
+                            }}
+                          >
+                            {task.account.accountNo ? "Update" : "Add"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  {paginatedEmployees.map((task: any) => {
+                    const totalSalary =
+                      task.salaryDetails?.reduce(
+                        (total: number, entry: any) =>
+                          total + Number(entry.salary),
+                        0
+                      ) ?? 0;
+
+                    return (
+                      <TableRow
+                        key={task.id}
+                        sx={{
+                          "&:hover": { backgroundColor: "#f1f8ff" },
+                        }}
+                      >
+                        <TableCell align="center" sx={{ fontWeight: 500 }}>
+                          {task.name}
+                        </TableCell>
+                        <TableCell align="center">
+                          {task.account.accountNo ?? "-"}
+                        </TableCell>
+                        <TableCell align="center">
+                          {task.account.bankName ?? "-"}
+                        </TableCell>
+                        <TableCell align="center">
+                          {task.account.branch ?? "-"}
+                        </TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 500 }}>
+                          ₹{totalSalary.toLocaleString("en-IN")}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Button
+                            variant="contained"
+                            size="small"
+                            color={
+                              task.account.accountNo ? "primary" : "success"
+                            }
+                            onClick={() =>
+                              navigate(
+                                task.account.accountNo
+                                  ? `/updateAccount/${task.id}`
+                                  : `/addAccount/${task.id}`
+                              )
+                            }
+                            sx={{
+                              textTransform: "capitalize",
+                              fontWeight: 500,
+                              px: 2,
+                              minWidth: 80,
+                            }}
+                          >
+                            {task.account.accountNo ? "Update" : "Add"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

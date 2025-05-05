@@ -13,12 +13,15 @@ import {
   Typography,
   TablePagination,
   TextField,
+  InputAdornment,
 } from "@mui/material";
 import Navbar from "../components/appBar";
 import { employeeList } from "../utils";
 import { useLocation, useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from "@mui/icons-material/Search";
+
 const drawerWidth = 240;
 const EmployeeList: FC = () => {
   const location = useLocation();
@@ -26,7 +29,7 @@ const EmployeeList: FC = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [searchQuery, setSearchQuery] = useState(""); // ✅
+  const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState(employeeList);
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -125,6 +128,13 @@ const EmployeeList: FC = () => {
                 setSearchQuery("");
                 setSearchQuery(e.target.value);
               }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+              }}
             />
             <Box component={"div"} sx={{ width: "50%" }}>
               <Button
@@ -161,7 +171,7 @@ const EmployeeList: FC = () => {
             // minWidth: 700,
             width: {
               xs: "40vh",
-              sm: "40vh",
+              sm: "100%",
               md: "100%",
               lg: "100%",
             },

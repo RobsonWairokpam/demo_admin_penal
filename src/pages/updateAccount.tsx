@@ -4,9 +4,8 @@ import {
   Box,
   Button,
   Card,
-  FormControl,
+  Grid,
   MenuItem,
-  Select,
   SelectChangeEvent,
   TextField,
   Toolbar,
@@ -75,11 +74,16 @@ const UpdateAccount: FC = () => {
     navigate("/adminDashboard");
   };
   const inputFields = [
-    { label: "Account Number", name: "accountNo", type: "number" },
-    { label: "Account Holder Name", name: "accountHolderName" },
-    { label: "Bank Name", name: "bankName" },
-    { label: "IFSC Code", name: "ifsc" },
-    { label: "Branch", name: "branch" },
+    {
+      label: "Account Number",
+      name: "accountNo",
+      type: "number",
+      required: true,
+    },
+    { label: "Account Holder Name", name: "accountHolderName", required: true },
+    { label: "Bank Name", name: "bankName", required: true },
+    { label: "IFSC Code", name: "ifsc", required: true },
+    { label: "Branch", name: "branch", required: true },
     {
       label: "Account Type",
       name: "accountType",
@@ -163,28 +167,25 @@ const UpdateAccount: FC = () => {
               </Typography>
 
               <Box component="form" onSubmit={handleSubmit}>
-                {/* <Grid container spacing={3}> */}
-                {inputFields.map((field) => (
-                  <Box
-                    key={field.name}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      mb: 2,
-                      gap: 2,
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Box sx={{ width: "100%" }}>
-                      <Typography sx={{ fontWeight: 500 }}>
-                        {field.label}:
-                      </Typography>
-                    </Box>
-                    <Box sx={{ width: "100%" }}>
-                      {field.type === "select" ? (
-                        <FormControl fullWidth variant="outlined">
-                          <Select
+                <Grid container spacing={3}>
+                  {inputFields.map((field) => (
+                    <Grid size={{ xs: 12, md: 6, lg: 4 }} key={field.name}>
+                      <Box sx={{ width: "100%" }}>
+                        <Typography sx={{ fontWeight: 500 }}>
+                          {field.label} &nbsp;
+                          {field.required && (
+                            <span style={{ color: "red" }}>*</span>
+                          )}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ width: "100%" }}>
+                        {field.type === "select" ? (
+                          <TextField
+                            select
+                            fullWidth
                             size="small"
+                            variant="outlined"
+                            required={field.required ? true : false}
                             name={field.name}
                             value={
                               formData[field.name as keyof typeof formData]
@@ -196,42 +197,46 @@ const UpdateAccount: FC = () => {
                                 {option}
                               </MenuItem>
                             ))}
-                          </Select>
-                        </FormControl>
-                      ) : (
-                        <TextField
-                          fullWidth
-                          size="small"
-                          variant="outlined"
-                          required
-                          name={field.name}
-                          type={field.type || "text"}
-                          value={formData[field.name as keyof typeof formData]}
-                          onChange={handleChange}
-                        />
-                      )}
-                    </Box>
-                  </Box>
-                ))}
+                          </TextField>
+                        ) : (
+                          <TextField
+                            fullWidth
+                            size="small"
+                            variant="outlined"
+                            required={field.required ? true : false}
+                            name={field.name}
+                            type={field.type || "text"}
+                            value={
+                              formData[field.name as keyof typeof formData]
+                            }
+                            onChange={handleChange}
+                          />
+                        )}
+                      </Box>
+                    </Grid>
+                  ))}{" "}
+                </Grid>
 
                 {/* <Grid size={{ xs: 12 }}> */}
-                <Button
-                  type="submit"
-                  variant="contained"
-                  // fullWidth
-                  sx={{
-                    py: 1.5,
-                    fontWeight: 600,
-                    textTransform: "capitalize",
-                    backgroundColor: "#0d47a1",
-                    "&:hover": {
-                      backgroundColor: "#1565c0",
-                    },
-                  }}
-                >
-                  Submit
-                </Button>
-                {/* </Grid> */}
+                <Box component={"div"} mt={4}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    // fullWidth
+                    sx={{
+                      py: 1.5,
+                      fontWeight: 600,
+                      textTransform: "capitalize",
+                      backgroundColor: "#0d47a1",
+                      "&:hover": {
+                        backgroundColor: "#1565c0",
+                      },
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Box>
+
                 {/* </Grid> */}
               </Box>
             </Card>
